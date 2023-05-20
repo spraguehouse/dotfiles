@@ -1,16 +1,46 @@
 #!/bin/zsh
 
-if ! [ -x "$(command -v git)" ]; then
-  if [ -x "$(command -v brew)" ]; then
-    brew install --quiet --force git
-  fi
-  if ! [ -x "$(command -v git)" ]; then
-    printf "\nThis script requires git and I couldn't find Homebrew, so I can't install it for you!\n"
-    exit 1
-  fi
+# Make sure Homebrew is installed.
+if ! [ -x "$(command -v brew)" ]; then
+  echo "Installing Homebrew..."
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
 #
+# Install default brews.
+#
+
+brews=(
+  "azure-cli"
+  "azure-functions-core-tools@4"
+  "bash"
+  "bicep"
+  "go"
+  "helm"
+  "iterm2"
+  "micro"
+  "node"
+  "powershell"
+  "python@3.11"
+  "terraform"
+  "tree"
+  "unnaturalscrollwheels"
+)
+
+for brew in "${brews[@]}"; do
+  if ! brew list "$brew" &>/dev/null; then
+    echo "Installing $brew..."
+    brew install "$brew"
+  fi
+done
+
+if ! [ -x "$(command -v git)" ]; then
+    echo "Installing git..."
+    brew install --quiet --force git
+fi
+
+#
+# Install latest dotfiles repo.
 #
 
 if [ -d ~/dotfiles ]; then
@@ -31,7 +61,8 @@ else
 fi
 
 #
-#
+# Create dot-file symlinks
+# 
 
 symlink() {
   if [ -e ~/$1 ]; then
@@ -41,9 +72,6 @@ symlink() {
   fi
   ln -sf ~/dotfiles/$1 ~/$1;
 }
-
-#
-#
 
 symlink .profile
 
@@ -63,6 +91,7 @@ cd ~
 #symlink .kubecompletion.bash # todo: need a zsh completion 
 
 #
+# Set or update Git username/email
 #
 
 YELLOW='\033[1;33m'
