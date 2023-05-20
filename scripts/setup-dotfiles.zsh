@@ -1,12 +1,11 @@
-#!/bin/bash
+#!/bin/zsh
 
 if ! [ -x "$(command -v git)" ]; then
-  if [ -x "$(command -v apt-get)" ]; then
-    apt-get update
-    apt-get install git -y
+  if [ -x "$(command -v brew)" ]; then
+    brew install --quiet --force git
   fi
   if ! [ -x "$(command -v git)" ]; then
-    printf "\nThis script requires git!\n"
+    printf "\nThis script requires git and I couldn't find Homebrew, so I can't install it for you!\n"
     exit 1
   fi
 fi
@@ -48,16 +47,20 @@ symlink() {
 
 symlink .profile
 
-symlink .bash_profile
-symlink .bashrc
+symlink .zsh_profile
+symlink .zshrc
 symlink .bash_aliases
-symlink .bash_prompt
+symlink .zsh_prompt
 
 symlink .gitconfig
 symlink .gitignore
-symlink .gitcompletion.bash
 
-symlink .kubecompletion.bash
+mkdir -p ~/.zsh && cd ~/.zsh
+curl -o git-completion.bash https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
+curl -o _git https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh
+cd ~
+
+#symlink .kubecompletion.bash # todo: need a zsh completion 
 
 #
 #
@@ -106,4 +109,5 @@ fi
 #
 #
 
-exec $BASH
+rm ~/.zcompdump # clear existing autocompletion cache
+exec /bin/zsh
