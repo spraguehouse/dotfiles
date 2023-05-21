@@ -32,7 +32,7 @@ brews=(
 for brew in "${brews[@]}"; do
   if ! brew list "$brew" &>/dev/null; then
     echo "Installing $brew..."
-    brew install "$brew"
+    brew install --quiet --force "$brew"
   fi
 done
 
