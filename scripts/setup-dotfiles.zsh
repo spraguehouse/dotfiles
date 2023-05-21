@@ -10,6 +10,8 @@ fi
 # Install default brews.
 #
 
+echo "Checking brew installations. This may take a minute..."
+
 brews=(
   "azure-cli"
   "azure-functions-core-tools@4"
