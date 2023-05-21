@@ -8,6 +8,7 @@ brews=(
   "go"
   "helm"
   "iterm2"
+  "jq"
   "micro"
   "node"
   "powershell"
@@ -15,6 +16,7 @@ brews=(
   "terraform"
   "tree"
   "unnaturalscrollwheels"
+  "yq"
 )
   
 # Make sure Homebrew is installed.
