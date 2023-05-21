@@ -50,16 +50,13 @@ draw_progress_bar() {
 
 totalBrews=${#brews[@]}
 brewInstallCounter=0
-
 for brew in "${brews[@]}"; do
-  # Increment the counter and draw the progress bar
-  ((brewInstallCounter++))
-  
-  draw_progress_bar brewInstallCounter "$totalBrews"
   if ! brew list "$brew" &>/dev/null; then
     echo "Installing $brew..."
     brew install --quiet --force "$brew"
   fi
+  ((brewInstallCounter++))
+  draw_progress_bar brewInstallCounter "$totalBrews"
 done
 
 printf "\n"
