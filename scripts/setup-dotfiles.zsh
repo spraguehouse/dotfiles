@@ -1,17 +1,5 @@
 #!/bin/zsh
 
-# Make sure Homebrew is installed.
-if ! [ -x "$(command -v brew)" ]; then
-  echo "Installing Homebrew..."
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-fi
-
-#
-# Install default brews.
-#
-
-echo "Checking brew installations. This may take a minute..."
-
 brews=(
   "azure-cli"
   "azure-functions-core-tools@4"
@@ -28,17 +16,57 @@ brews=(
   "tree"
   "unnaturalscrollwheels"
 )
+  
+# Make sure Homebrew is installed.
+if ! [ -x "$(command -v brew)" ]; then
+  echo "Installing Homebrew..."
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+
+#
+# Install default brews.
+#
+
+echo "Checking brew installations. This may take a minute..."
+
+draw_progress_bar() {
+  # Argument 1: current progress (integer)
+  # Argument 2: total progress (integer)
+  local current=${1}
+  local total=${2}
+  local width=50
+  local progress=$((current*100/total))
+  local filled=$((progress*width/100))
+  local empty=$((width-filled))
+
+  printf "\r["
+  printf "%0.s=" $(seq -s ' ' 1 $filled)
+  if [ $empty -gt 0 ]; then
+    printf ">"
+    printf "%0.s " $(seq -s ' ' 2 $empty)
+  fi
+  printf "] %d%%" $progress
+}
+
+totalBrews=${#brews[@]}
+brewInstallCounter=0
 
 for brew in "${brews[@]}"; do
+  # Increment the counter and draw the progress bar
+  ((brewInstallCounter++))
+  
+  draw_progress_bar brewInstallCounter "$totalBrews"
   if ! brew list "$brew" &>/dev/null; then
     echo "Installing $brew..."
     brew install --quiet --force "$brew"
   fi
 done
 
+printf "\n"
+
 if ! [ -x "$(command -v git)" ]; then
-    echo "Installing git..."
-    brew install --quiet --force git
+  echo "Installing git..."
+  brew install --quiet --force git
 fi
 
 #
