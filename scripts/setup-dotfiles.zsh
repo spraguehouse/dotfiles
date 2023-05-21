@@ -45,22 +45,9 @@ fi
 # Install latest dotfiles repo.
 #
 
-if [ -d ~/dotfiles ]; then
-  echo "Directory ~/dotfiles exists."
-  cd ~/dotfiles
-  if [ -d .git ]; then
-    echo "Directory ~/dotfiles is a git repository. Pulling latest changes..."
-    git stash -u && git pull && git stash pop || { echo "Pulling changes failed. Exiting script."; exit 1; }
-  else
-    echo "Directory ~/dotfiles is not a git repository. Removing directory and cloning..."
-    cd ~
-    rm -rf dotfiles
-    git clone https://github.com/spraguehouse/dotfiles.git ~/dotfiles || { echo "Cloning repository failed. Exiting script."; exit 1; }
-  fi
-else
-  echo "Directory ~/dotfiles does not exist. Cloning repository..."
-  git clone https://github.com/spraguehouse/dotfiles.git ~/dotfiles || { echo "Cloning repository failed. Exiting script."; exit 1; }
-fi
+cd ~
+rm -rf dotfiles
+git clone https://github.com/spraguehouse/dotfiles.git ~/dotfiles
 
 #
 # Create dot-file symlinks
