@@ -73,10 +73,11 @@ prompt_node() {
 
 prompt_k8s() {
 
-  if [[ ! -z "$(k config current-context)" ]] && ! "$k config current-context" == 'error: current-context is not set'; then
+  ctx=$(k config current-context)
+  if [[ ! -z "$ctx" ]] && [[ "$ctx" != 'error: current-context is not set' ]]; then
     echo "${1}$(k config current-context)/$(k config view --minify --output jsonpath={..namespace})${reset}";
   fi
- }
+}
 
 #
 #
