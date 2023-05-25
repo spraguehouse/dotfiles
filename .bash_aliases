@@ -1,4 +1,10 @@
 #
+# az*
+alias azoj="az config set core.output=jsonc >/dev/null 2>&1; echo 'az cli default output set to: jsonc'"
+alias azoy="az config set core.output=yamlc >/dev/null 2>&1; echo 'az cli default output set to: yamlc'"
+alias azot="az config set core.output=table >/dev/null 2>&1; echo 'az cli default output set to: table'"
+
+#
 # cd(n)
 alias cd1="cd .."
 alias cd2="cd ../../"
