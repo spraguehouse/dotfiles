@@ -1,9 +1,9 @@
-if [ -f .bash_aliases ]; then
-  source .bash_aliases
+if [ -f ~/.bash_aliases ]; then
+  source ~/.bash_aliases
 fi
 
-if [ -f .zsh_prompt ]; then
-  source .zsh_prompt
+if [ -f ~/.zsh_prompt ]; then
+  source ~/.zsh_prompt
 fi
 
 autoload -Uz compinit && compinit
@@ -16,8 +16,8 @@ if [ -d ~/.zsh ]; then
   fpath=(~/.zsh $fpath)
 fi
 
-if [ -f .kubecompletion.zsh ]; then
-  source .kubecompletion.zsh
+if [ -f ~/.kubecompletion.zsh ]; then
+  source ~/.kubecompletion.zsh
 fi
 
 if [ -f /usr/bin/kubectl ] || [ -f /usr/local/bin/kubectl ]; then
