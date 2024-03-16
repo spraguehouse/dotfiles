@@ -28,3 +28,5 @@ fi
 if [ -f /opt/homebrew/etc/bash_completion.d/az ]; then
   source /opt/homebrew/etc/bash_completion.d/az
 fi
+
+eval "$(zoxide init zsh)"
