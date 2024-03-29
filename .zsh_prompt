@@ -26,6 +26,13 @@ fi
 #
 #
 
+prompt_azure_subscription() {
+  subscription=$(az account show --query 'name' -o tsv 2>/dev/null)
+  if [[ ! -z "$subscription" ]]; then
+    echo "${1}$subscription${reset} ";
+  fi
+}
+
 prompt_git() {
 
   local s='';
@@ -57,20 +64,6 @@ prompt_git() {
   fi;
 }
 
-prompt_node() {
-
-  if [ -x "$(command -v node)" ]; then
-    node_version=`node -v`
-    if [ -f "./package.json" ]; then
-      nvm_string=""
-      if [[ -f "./.nvmrc" && ( "`cat .nvmrc`" != $node_version && "v`cat .nvmrc`" != $node_version ) ]]; then
-        nvm_string="${red} != .nvmrc";
-      fi
-      echo "${1}${node_version}${nvm_string}${reset}";
-    fi
-  fi;
-}
-
 prompt_k8s() {
 
   ctx=$(k config current-context 2>/dev/null)
@@ -97,9 +90,9 @@ fi;
 setopt PROMPT_SUBST  # enable command substitution in the prompt
 
 PS1="%{$userStyle%}%n%{$reset%} on %{$yellow%}%m%{$reset%} in %{$fg[green]%}%~%{$reset%}"
-PS1+='$(prompt_git " git:${violet}")$(prompt_node " node:${cyan}")$(prompt_k8s " k8s:${pink}")'
+PS1+='$(prompt_git " ${violet}")$(prompt_k8s " k8s:${pink}")'
 PS1+=$'\n'
-PS1+="%{$white%}λ %{$reset%}"
+PS1+="$(prompt_azure_subscription "${cyan}")%{$white%}λ %{$reset%}"
 export PS1
 
 PS2="%{$yellow%}→ %{$reset%}"
