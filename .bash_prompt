@@ -57,19 +57,6 @@ prompt_git() {
   fi;
 }
 
-prompt_node() {
-  if [ -x "$(command -v node)" ]; then
-    node_version=`node -v`
-    if [ -f "./package.json" ]; then
-      nvm_string=""
-      if [[ -f "./.nvmrc" && ( "`cat .nvmrc`" != $node_version && "v`cat .nvmrc`" != $node_version ) ]]; then
-        nvm_string="${red} != .nvmrc";
-      fi
-      echo -e "${1}${node_version}${nvm_string}";
-    fi
-  fi;
-}
-
 prompt_k8s() {
   if [[ ! -z "$KUBECONFIG" ]]; then
     echo -e "${1}$(k config current-context)/$(k config view --minify --output jsonpath={..namespace})";
@@ -128,7 +115,6 @@ PS1+="\[${white}\] at ";
 PS1+="\[${hostStyle}\]\h"; # host
 PS1+="\[${white}\] in ${green}\w"; # working directory
 PS1+="\$(prompt_git \"${white} git:${violet}\")"; # Git repository details
-PS1+="\$(prompt_node \"${white} node:${cyan}\")"; # Node.js version
 PS1+="\$(prompt_k8s \"${white} k8s:${purple}\")"; # Kubernetes config
 PS1+="\n";
 PS1+="\[${white}\]λ \[${reset}\]"; # `$` (and reset color)
