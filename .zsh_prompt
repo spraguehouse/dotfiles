@@ -90,9 +90,9 @@ fi;
 setopt PROMPT_SUBST  # enable command substitution in the prompt
 
 PS1="%{$userStyle%}%n%{$reset%} on %{$yellow%}%m%{$reset%} in %{$fg[green]%}%~%{$reset%}"
-PS1+='$(prompt_git " ${violet}")$(prompt_k8s " k8s:${pink}")'
+PS1+='$(prompt_git " ${violet}")$(prompt_k8s " k8s:${pink}")$(prompt_azure_subscription " az:${cyan}")'
 PS1+=$'\n'
-PS1+="$(prompt_azure_subscription "${cyan}")%{$white%}λ %{$reset%}"
+PS1+="%{$white%}λ %{$reset%}"
 export PS1
 
 PS2="%{$yellow%}→ %{$reset%}"
