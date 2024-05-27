@@ -27,6 +27,9 @@ if [[ $OSTYPE == 'darwin'* ]]; then alias dotfiles-update='cd ~ && curl -L https
 else alias dotfiles-update='cd ~ && curl -L https://raw.githubusercontent.com/spraguehouse/dotfiles/main/scripts/setup-dotfiles.bash -o setup-dotfiles.bash && source setup-dotfiles.bash'
 fi
 
+# gp
+alias gp='git push --follow-tags origin main'
+
 #
 # k*
 alias k='kubectl'
@@ -52,6 +55,9 @@ alias path='echo -e ${PATH//:/\\n}'
 
 # start
 start() { nohup $1 &> /dev/null & disown; }
+
+# sv
+alias sv='standard-version'
 
 # tree
 alias tree='tree -I ".git|node_modules"'
