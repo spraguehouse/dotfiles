@@ -36,6 +36,7 @@ alias k='kubectl'
 alias ks='echo -e "context: $(k config current-context)\nnamespace: $(k config view --minify --output jsonpath={..namespace})"'
 alias kc='f (){ export KUBECONFIG=~/.kube/"$@".yaml; unset -f f; }; f'
 alias kns='f(){ k config set-context --current --namespace="$@"; unset -f f; }; f'
+alias kga='kubectl get all,cm,secret,ing'
 if [[ $SHELL != '/bin/zsh'* ]]; then complete -F __start_kubectl k; fi
 
 #
