@@ -20,7 +20,7 @@ alias dcll='dps -a'
 alias di='d image'
 alias dil='d image ls'
 alias dill='d image ls -a'
-alias dps='d ps --format "table {{.ID}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"'
+alias dps='d ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"'
 
 # dotfiles-update
 if [[ $OSTYPE == 'darwin'* ]]; then alias dotfiles-update='cd ~ && curl -L https://raw.githubusercontent.com/spraguehouse/dotfiles/main/scripts/setup-dotfiles.zsh -o setup-dotfiles.zsh && source setup-dotfiles.zsh'
