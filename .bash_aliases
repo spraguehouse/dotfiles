@@ -6,6 +6,7 @@ alias azot="az config set core.output=table >/dev/null 2>&1; echo 'az cli defaul
 
 #
 # cd(n)
+alias cd="z"
 alias cd1="cd .."
 alias cd2="cd ../../"
 alias cd3="cd ../../../"
