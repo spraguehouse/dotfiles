@@ -55,6 +55,9 @@ alias p='python'
 # path
 alias path='echo -e ${PATH//:/\\n}'
 
+## ssha
+alias ssha='eval $(ssh-agent) && ssh-add'
+
 # start
 start() { nohup $1 &> /dev/null & disown; }
 
