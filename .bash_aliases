@@ -67,6 +67,5 @@ alias sv='standard-version'
 # tree
 alias tree='tree -I ".git|node_modules"'
 
-if [[ `uname` == Darwin ]] then
-	alias uuidgen='uuidgen | tr A-F a-f'
-fi
+# uuidgen
+if [[ $OSTYPE == 'darwin'* ]]; then alias uuidgen='uuidgen | tr A-F a-f'; fi
