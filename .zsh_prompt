@@ -29,7 +29,8 @@ fi
 prompt_azure_subscription() {
   subscription=$(az account show --query 'name' -o tsv 2>/dev/null)
   if [[ ! -z "$subscription" ]]; then
-    echo "${1}$subscription${reset} ";
+    s="${subscription/LZ - /""}"
+    echo "(${cyan}${s}${reset})";
   fi
 }
 
@@ -68,7 +69,7 @@ prompt_k8s() {
 
   ctx=$(k config current-context 2>/dev/null)
   if [[ ! -z "$ctx" ]]; then
-    echo "${1}$ctx/$(k config view --minify --output jsonpath={..namespace})${reset}";
+    echo "(${pink}$ctx/$(k config view --minify --output jsonpath={..namespace})${reset})";
   fi
 }
 
@@ -89,10 +90,10 @@ fi;
 
 setopt PROMPT_SUBST  # enable command substitution in the prompt
 
-PS1="%{$userStyle%}%n%{$reset%} on %{$yellow%}%m%{$reset%} in %{$fg[green]%}%~%{$reset%}"
-PS1+='$(prompt_git " ${violet}")$(prompt_k8s " k8s:${pink}")$(prompt_azure_subscription " az:${cyan}")'
-PS1+=$'\n'
-PS1+="%{$white%}λ %{$reset%}"
+PS1="%{$userStyle%}%n%{$reset%}@%{$yellow%}%m%{$reset%}" # user@host
+PS1+='$(prompt_k8s)$(prompt_azure_subscription)' # special
+PS1+=":%{$fg[green]%}%~%{$reset%}" # path
+PS1+="%{$white%}λ %{$reset%}" # prompt
 export PS1
 
 PS2="%{$yellow%}→ %{$reset%}"
