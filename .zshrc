@@ -6,7 +6,7 @@ if [ -f ~/.zsh_prompt ]; then
   source ~/.zsh_prompt
 fi
 
-autoload -Uz compinit && compinit
+autoload -Uz compinit && compinit -i
 autoload -U +X bashcompinit && bashcompinit
 
 if [ -d ~/.zsh ]; then
