@@ -28,6 +28,9 @@ if [[ $OSTYPE == 'darwin'* ]]; then alias dotfiles-update='cd ~ && curl -L https
 else alias dotfiles-update='cd ~ && curl -L https://raw.githubusercontent.com/spraguehouse/dotfiles/main/scripts/setup-dotfiles.bash -o setup-dotfiles.bash && source setup-dotfiles.bash'
 fi
 
+# flushdns
+alias flushdns='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
+
 # gp
 alias gp='git push --follow-tags origin main'
 
