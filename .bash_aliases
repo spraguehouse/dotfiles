@@ -49,6 +49,9 @@ if [[ $OSTYPE == 'darwin'* ]]; then alias l="ls -cl -hp --color=always"
 else alias l="ls -cl -hp --time-style=long-iso --group-directories-first --color=always"; fi
 alias ll="l -a"
 
+# mk
+alias mk='minikube'
+
 # open
 if [[ $OSTYPE != 'darwin'* ]]; then alias open="xdg-open"; fi
 
