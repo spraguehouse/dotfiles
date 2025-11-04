@@ -2,4 +2,4 @@
 # Only put environment variables and essential tools here
 
 # Initialize zoxide (provides 'z' and aliases 'cd' to it)
-eval "$(zoxide init zsh)"
+eval "$(/usr/local/bin/zoxide init zsh)"
