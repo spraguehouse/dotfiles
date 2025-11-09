@@ -1,4 +1,256 @@
-.DS_Store
+###################################################################################################
+# Development Languages, Frameworks, and Tools
+###################################################################################################
+
+#
+# Azure
+#
+
+PublishScripts/
+*.azurePubxml
+
+# Microsoft Azure Build Output
+csx/
+*.build.csdef
+
+# Microsoft Azure Emulator
+ecf/
+rcf/
+
+# Azure Stream Analytics local run output
+ASALocalRun/
+
+#
+# Docker
+#
+
+.env
+
+#
+# Function Apps
+#
+
+local.settings.json
+
+#
+# JavaScript and Static Files
+#
+
+dist/
+
+# Uncomment if you have tasks that create the project's static files in wwwroot
+#wwwroot/
+
+#
+# NodeJS
+#
+
+.ntvs_analysis.dat
+node_modules/
+
+#
+# NuGet
+#
+
+# NuGet Packages
+*.nupkg
+
+# NuGet Symbol Packages
+*.snupkg
+
+# The packages folder can be ignored because of Package Restore
+**/[Pp]ackages/*
+
+# except build/, which is used as an MSBuild target.
+!**/[Pp]ackages/build/
+
+*.nuget.props
+*.nuget.targets
+
+#
+# Python
+#
+
+.venv/
+venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+#
+# Windows Store App Packages
+#
+
+AppPackages/
+BundleArtifacts/
+Package.StoreAssociation.xml
+_pkginfo.txt
+*.appx
+*.appxbundle
+*.appxupload  
+  
+#  
+# Claude  
+#  
+.claude/  
+CLAUDE.md
+
+###################################################################################################
+# Terraform
+###################################################################################################
+
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+crash.log
+
+# Exclude all .tfvars files, which are likely to contain sentitive data, such as password, private keys, and other secrets.
+# These should not be part of version control as they are data points which are potentially sensitive and subject to change depending on the environment.
+*.tfvars
+
+# Ignore override files as they are usually used to override resources locally
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Include override files you do wish to add to version control using negated pattern
+# !example_override.tf
+
+# Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
+# example: *tfplan*
+*tfplan*
+*.plan
+
+# Ignore CLI configuration files
+.terraformrc
+terraform.rc
+
+###################################################################################################
+# Visual Studio and Other IDEs
+###################################################################################################
+
+.idea
+.vs
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# User-specific files (MonoDevelop/Xamarin Studio)
+*.userprefs
+
+# Mono auto generated files
+mono_crash.*
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Files built by Visual Studio
+*_i.c
+*_p.c
+*_h.h
+*.ilk
+*.meta
+*.obj
+*.iobj
+*.pch
+*.pdb
+*.ipdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*_wpftmp.csproj
+*.log
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+
+# Local History for Visual Studio
+.localhistory/
+
+# Visual Studio cache files. Files ending in .cache can be ignored, but keep track of directories ending in .cache
+*.[Cc]ache
+!?*.[Cc]ache/
+
+# Publish output
+publish/
+*.[Pp]ublish.xml
+*.pubxml
+*.publishproj
+
+# ReSharper & DotCover
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+*.dotCover
+
+# Others
+ClientBin/
+~$*
+*~
+*.dbmdl
+*.dbproj.schemaview
+*.jfm
+*.publishsettings
+orleans.codegen.cs
+
+###################################################################################################
+# Operating System Files
+###################################################################################################
+
 Thumbs.db
-.idea/
-.vscode/
+
+# OSX leaves these everywhere on SMB shares
+._*
+
+# OSX trash
+.DS_Store
+
+###################################################################################################
+# Miscellaneous Files
+###################################################################################################
+
+# Archives
+*.zip
+
+# Strong Name files (https://github.com/github/gitignore/pull/2483#issue-259490424)
+*.snk
+
+# Machine learning model binaries
+*.bin
+
+# Miscellaneous token files for storing api keys and whatnot. Each file would contain a single
+# key value that can be used by scripts `$(cat my_api.token)`
+*.token
+
+# Certificates
+*.cer
+*.pfx
+*.p12
+*.pem
