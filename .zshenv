@@ -2,4 +2,6 @@
 # Only put environment variables and essential tools here
 
 # Initialize zoxide (provides 'z' and aliases 'cd' to it)
-eval "$(/usr/local/bin/zoxide init zsh)"
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh)"
+fi
