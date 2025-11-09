@@ -91,6 +91,7 @@ symlink() {
 
 symlink .profile
 
+symlink .zshenv
 symlink .zsh_profile
 symlink .zshrc
 symlink .bash_aliases
