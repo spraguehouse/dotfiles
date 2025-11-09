@@ -20,8 +20,8 @@ if [ -f ~/.kubecompletion.zsh ]; then
   source ~/.kubecompletion.zsh
 fi
 
-if [ -f /usr/bin/kubectl ] || [ -f /usr/local/bin/kubectl ]; then
-  kubectl completion bash | bash
+if command -v kubectl >/dev/null 2>&1; then
+  source <(kubectl completion zsh)
 fi
 
 
