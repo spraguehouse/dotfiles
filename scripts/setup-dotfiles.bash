@@ -64,8 +64,8 @@ symlink .kubecompletion.bash
 
 YELLOW='\033[1;33m'
 RESET='\033[0m'
-GIT_FULLNAME=$(git config --system --get user.name)
-GIT_EMAIL=$(git config --system --get user.email)
+GIT_FULLNAME=$(git config --global --get user.name)
+GIT_EMAIL=$(git config --global --get user.email)
 
 if [ -n "$GIT_FULLNAME" ]; then
   echo -e "${YELLOW}Warning: Git fullname is already set to $GIT_FULLNAME. Do you want to change it? [y/N]${RESET}"
@@ -73,15 +73,13 @@ if [ -n "$GIT_FULLNAME" ]; then
   if [[ "$CHANGE" =~ ^[Yy]$ ]]; then
     echo "Enter new Git fullname:"
     read GIT_FULLNAME
-    echo "Requesting root permissions to set git config at system level..."
-    sudo git config --system user.name "$GIT_FULLNAME"
+    git config --global user.name "$GIT_FULLNAME"
     echo "Success."
   fi
 else
   echo "Enter Git fullname:"
   read GIT_FULLNAME
-  echo "Requesting root permissions to set git config at system level..."
-  sudo git config --system user.name "$GIT_FULLNAME"
+  git config --global user.name "$GIT_FULLNAME"
   echo "Success."
 fi
 
@@ -91,15 +89,13 @@ if [ -n "$GIT_EMAIL" ]; then
   if [[ "$CHANGE" =~ ^[Yy]$ ]]; then
     echo "Enter new Git email:"
     read GIT_EMAIL
-    echo "Requesting root permissions to set git config at system level..."
-    sudo git config --system user.email "$GIT_EMAIL"
+    git config --global user.email "$GIT_EMAIL"
     echo "Success."
   fi
 else
   echo "Enter Git email:"
   read GIT_EMAIL
-  echo "Requesting root permissions to set git config at system level..."
-  sudo git config --system user.email "$GIT_EMAIL"
+  git config --global user.email "$GIT_EMAIL"
   echo "Success."
 fi
 
