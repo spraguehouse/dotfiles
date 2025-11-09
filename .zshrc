@@ -33,5 +33,4 @@ fi
 
 setopt INTERACTIVE_COMMENTS
 
-# Added by dci CLI installer
-export PATH="${PATH}:/Users/jsprague/.local/bin"
+export PATH="${PATH}:${HOME}/.local/bin"
