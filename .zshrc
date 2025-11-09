@@ -2,9 +2,18 @@ if [ -f ~/.bash_aliases ]; then
   source ~/.bash_aliases
 fi
 
-if [ -f ~/.zsh_prompt ]; then
-  source ~/.zsh_prompt
+# Load Powerlevel10k theme
+if [ -f /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme ]; then
+  source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
 fi
+
+# Load Powerlevel10k configuration
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Legacy custom prompt (replaced by Powerlevel10k)
+# if [ -f ~/.zsh_prompt ]; then
+#   source ~/.zsh_prompt
+# fi
 
 autoload -Uz compinit && compinit -i
 autoload -U +X bashcompinit && bashcompinit

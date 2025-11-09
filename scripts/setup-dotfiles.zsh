@@ -11,6 +11,7 @@ brews=(
   "jq"
   "micro"
   "node"
+  "powerlevel10k"
   "powershell"
   "python@3.11"
   "terraform"
@@ -96,6 +97,7 @@ symlink .zsh_profile
 symlink .zshrc
 symlink .bash_aliases
 symlink .zsh_prompt
+symlink .p10k.zsh
 
 symlink .gitconfig
 symlink .gitignore
