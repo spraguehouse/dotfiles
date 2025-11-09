@@ -13,6 +13,9 @@ alias cd3="cd ../../../"
 alias cd4="cd ../../../../"
 alias cd5="cd ../../../../../"
 
+# cc
+alias cc='(cd ~/.claude && claude)'
+
 # d*
 alias d='docker'
 alias dc='d container'
