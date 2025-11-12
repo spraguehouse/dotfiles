@@ -2,9 +2,11 @@ if [ -f ~/.bash_aliases ]; then
   source ~/.bash_aliases
 fi
 
-# Load Powerlevel10k theme
+# Load Powerlevel10k theme (check both Intel and Apple Silicon paths)
 if [ -f /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme ]; then
   source /opt/homebrew/share/powerlevel10k/powerlevel10k.zsh-theme
+elif [ -f /usr/local/share/powerlevel10k/powerlevel10k.zsh-theme ]; then
+  source /usr/local/share/powerlevel10k/powerlevel10k.zsh-theme
 fi
 
 # Load Powerlevel10k configuration
