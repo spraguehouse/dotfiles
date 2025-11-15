@@ -1,14 +1,34 @@
 #!/bin/bash
 
-if ! [ -x "$(command -v git)" ]; then
-  if [ -x "$(command -v apt-get)" ]; then
-    apt-get update
+# Install required dependencies
+if [ -x "$(command -v apt-get)" ]; then
+  echo "Checking and installing dependencies via apt..."
+
+  # Update package list
+  apt-get update
+
+  # Install git if missing
+  if ! [ -x "$(command -v git)" ]; then
+    echo "Installing git..."
     apt-get install git -y
   fi
-  if ! [ -x "$(command -v git)" ]; then
-    printf "\nThis script requires git!\n"
-    exit 1
+
+  # Install zoxide if missing
+  if ! [ -x "$(command -v zoxide)" ]; then
+    echo "Installing zoxide..."
+    apt-get install zoxide -y
   fi
+
+  # Install Azure CLI if missing
+  if ! [ -x "$(command -v az)" ]; then
+    echo "Azure CLI not found. Install manually from: https://aka.ms/InstallAzureCLIDeb"
+  fi
+fi
+
+# Verify git is installed
+if ! [ -x "$(command -v git)" ]; then
+  printf "\nThis script requires git!\n"
+  exit 1
 fi
 
 #
@@ -100,6 +120,20 @@ else
 fi
 
 #
+# Restart shell (optional, skippable for SSH safety)
 #
 
-exec $BASH
+if [ -n "$SSH_CONNECTION" ] || [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+  echo -e "${YELLOW}Warning: You are connected via SSH. Restarting the shell could disconnect you.${RESET}"
+  echo "Do you want to restart bash now? [y/N]"
+  read RESTART_SHELL
+  if [[ "$RESTART_SHELL" =~ ^[Yy]$ ]]; then
+    echo "Restarting bash..."
+    exec $BASH
+  else
+    echo "Setup complete! Run 'source ~/.bashrc' or start a new terminal to apply changes."
+  fi
+else
+  echo "Setup complete! Restarting bash..."
+  exec $BASH
+fi
