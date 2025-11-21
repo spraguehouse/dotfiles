@@ -52,6 +52,9 @@ if [[ $OSTYPE == 'darwin'* ]]; then alias l="ls -cl -hp --color=always"
 else alias l="ls -cl -hp --time-style=long-iso --group-directories-first --color=always"; fi
 alias ll="l -a"
 
+# ma-observe (multi-agent observability)
+alias ma-observe='f(){ if [ "$1" = "start" ]; then ~/.claude/observability/start.sh; elif [ "$1" = "stop" ]; then ~/.claude/observability/stop.sh; elif [ "$1" = "logs" ]; then tail -f ~/.claude/observability/server.log; elif [ "$1" = "dashboard" ]; then open http://localhost:5173; else echo "Usage: ma-observe [start|stop|logs|dashboard]"; fi; unset -f f; }; f'
+
 # mk
 alias mk='minikube'
 

@@ -45,3 +45,10 @@ fi
 setopt INTERACTIVE_COMMENTS
 
 export PATH="${PATH}:${HOME}/.local/bin"
+
+# bun completions
+[ -s "/Users/jsprague/.bun/_bun" ] && source "/Users/jsprague/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
