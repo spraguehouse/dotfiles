@@ -14,7 +14,8 @@ alias cd4="cd ../../../../"
 alias cd5="cd ../../../../../"
 
 # cc
-alias cc='(cd ~/.claude && claude)'
+alias cc='claude'
+alias ccy='claude --dangerously-skip-permissions'
 
 # d*
 alias d='docker'
