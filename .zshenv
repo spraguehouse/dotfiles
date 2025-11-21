@@ -10,9 +10,7 @@ fi
 
 
 # Initialize zoxide (provides 'z' and aliases 'cd' to it)
-# Check both Intel and Apple Silicon paths
-if command -v /opt/homebrew/bin/zoxide >/dev/null 2>&1; then
-  eval "$(/opt/homebrew/bin/zoxide init zsh)"
-elif command -v /usr/local/bin/zoxide >/dev/null 2>&1; then
-  eval "$(/usr/local/bin/zoxide init zsh)"
+# Supports multiple installation locations: Homebrew (macOS), apt (Linux), cargo (manual install)
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh)"
 fi
