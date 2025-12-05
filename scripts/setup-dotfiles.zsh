@@ -82,11 +82,6 @@ git clone https://github.com/spraguehouse/dotfiles.git ~/dotfiles
 # 
 
 symlink() {
-  if [ -e ~/$1 ]; then
-    echo "Found existing file, creating backup: ~/dotfiles_backups/${1}.bak"
-    if [ ! -d ~/dotfiles_backups ]; then mkdir ~/dotfiles_backups; fi
-    mv ~/$1 ~/dotfiles_backups/$1.bak
-  fi
   ln -sf ~/dotfiles/$1 ~/$1;
 }
 

@@ -13,7 +13,7 @@ cd ~ && curl -L https://raw.githubusercontent.com/spraguehouse/dotfiles/main/scr
 
 ## Uninstall
 
-Removes all dotfiles configuration and restores original shell files from backup.
+Removes all dotfiles configuration.
 
 ```shell
 # Interactive uninstall (with confirmation prompts)
@@ -33,5 +33,4 @@ Options:
 - `-h, --help` - Show help message
 - `-f, --force` - Skip confirmation prompts
 - `-n, --dry-run` - Preview changes without executing
-- `--keep-backups` - Preserve `~/dotfiles_backups/` directory
 - `--keep-repo` - Preserve `~/dotfiles/` repository

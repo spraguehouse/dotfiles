@@ -2,8 +2,7 @@
 #
 # Uninstall Dotfiles Script
 #
-# Cleanly removes all dotfiles configuration from a machine and restores
-# the original shell configuration from backups when available.
+# Cleanly removes all dotfiles configuration from a machine.
 #
 # Usage: ./uninstall-dotfiles.sh [OPTIONS]
 #
@@ -11,7 +10,6 @@
 #   -h, --help         Show this help message
 #   -f, --force        Skip confirmation prompts (for non-interactive use)
 #   -n, --dry-run      Preview what would be done without making changes
-#   --keep-backups     Preserve the ~/dotfiles_backups/ directory
 #   --keep-repo        Preserve the ~/dotfiles/ repository
 #
 
@@ -27,13 +25,11 @@ RESET='\033[0m'
 
 # Configuration
 DOTFILES_DIR="$HOME/dotfiles"
-BACKUPS_DIR="$HOME/dotfiles_backups"
 ZSH_COMPLETIONS_DIR="$HOME/.zsh"
 
 # Command-line flags
 FORCE=false
 DRY_RUN=false
-KEEP_BACKUPS=false
 KEEP_REPO=false
 
 # All dotfiles that could be symlinked (union of bash and zsh setup scripts)
@@ -86,14 +82,12 @@ show_help() {
     cat << EOF
 Usage: $(basename "$0") [OPTIONS]
 
-Cleanly removes all dotfiles configuration from a machine and restores
-the original shell configuration from backups when available.
+Cleanly removes all dotfiles configuration from a machine.
 
 Options:
   -h, --help         Show this help message and exit
   -f, --force        Skip confirmation prompts (for non-interactive use)
   -n, --dry-run      Preview what would be done without making changes
-  --keep-backups     Preserve the ~/dotfiles_backups/ directory
   --keep-repo        Preserve the ~/dotfiles/ repository
 
 Examples:
@@ -118,20 +112,6 @@ is_dotfiles_symlink() {
     return 1
 }
 
-# Get backup file path for a dotfile
-get_backup_path() {
-    local dotfile="$1"
-    echo "${BACKUPS_DIR}/${dotfile}.bak"
-}
-
-# Check if backup exists for a dotfile
-has_backup() {
-    local dotfile="$1"
-    local backup_path
-    backup_path=$(get_backup_path "$dotfile")
-    [ -f "$backup_path" ]
-}
-
 #
 # Detection functions
 #
@@ -147,20 +127,8 @@ detect_installed_dotfiles() {
     echo "${installed[@]}"
 }
 
-detect_available_backups() {
-    local backups=()
-    if [ -d "$BACKUPS_DIR" ]; then
-        for dotfile in "${DOTFILES[@]}"; do
-            if has_backup "$dotfile"; then
-                backups+=("$dotfile")
-            fi
-        done
-    fi
-    echo "${backups[@]}"
-}
-
 #
-# Removal and restoration functions
+# Removal functions
 #
 
 remove_symlink() {
@@ -185,30 +153,6 @@ remove_symlink() {
     else
         rm "$file_path"
         log_success "Removed symlink: $dotfile"
-    fi
-}
-
-restore_from_backup() {
-    local dotfile="$1"
-    local file_path="$HOME/$dotfile"
-    local backup_path
-    backup_path=$(get_backup_path "$dotfile")
-
-    if [ ! -f "$backup_path" ]; then
-        return 0  # No backup to restore
-    fi
-
-    # Don't restore if target still exists (wasn't removed or isn't our symlink)
-    if [ -e "$file_path" ]; then
-        log_warn "Cannot restore $dotfile: target file still exists"
-        return 0
-    fi
-
-    if $DRY_RUN; then
-        log_dry_run "Restore $dotfile from backup"
-    else
-        mv "$backup_path" "$file_path"
-        log_success "Restored from backup: $dotfile"
     fi
 }
 
@@ -257,17 +201,6 @@ remove_dotfiles_repo() {
     fi
 }
 
-remove_backups_dir() {
-    if [ -d "$BACKUPS_DIR" ]; then
-        if $DRY_RUN; then
-            log_dry_run "Remove backups directory: $BACKUPS_DIR"
-        else
-            rm -rf "$BACKUPS_DIR"
-            log_success "Removed backups directory"
-        fi
-    fi
-}
-
 #
 # Main execution
 #
@@ -285,10 +218,6 @@ parse_args() {
                 ;;
             -n|--dry-run)
                 DRY_RUN=true
-                shift
-                ;;
-            --keep-backups)
-                KEEP_BACKUPS=true
                 shift
                 ;;
             --keep-repo)
@@ -324,19 +253,6 @@ show_summary() {
     fi
     echo ""
 
-    # Check what backups exist
-    local backups
-    backups=($(detect_available_backups))
-    if [ ${#backups[@]} -gt 0 ]; then
-        log_info "Files to restore from backup:"
-        for dotfile in "${backups[@]}"; do
-            echo "    - ~/$dotfile"
-        done
-    else
-        log_info "No backup files found"
-    fi
-    echo ""
-
     # Additional cleanup
     log_info "Additional cleanup:"
     if [ -d "$ZSH_COMPLETIONS_DIR" ]; then
@@ -349,11 +265,6 @@ show_summary() {
         echo "    - Remove ~/dotfiles/ repository"
     elif $KEEP_REPO; then
         echo "    - Keep ~/dotfiles/ repository (--keep-repo)"
-    fi
-    if [ -d "$BACKUPS_DIR" ] && ! $KEEP_BACKUPS; then
-        echo "    - Remove ~/dotfiles_backups/ directory (after restoration)"
-    elif $KEEP_BACKUPS; then
-        echo "    - Keep ~/dotfiles_backups/ directory (--keep-backups)"
     fi
     echo ""
 }
@@ -386,11 +297,10 @@ execute_uninstall() {
     fi
     echo ""
 
-    # Step 1: Remove symlinks and restore backups
+    # Step 1: Remove symlinks
     log_info "Processing dotfile symlinks..."
     for dotfile in "${DOTFILES[@]}"; do
         remove_symlink "$dotfile"
-        restore_from_backup "$dotfile"
     done
     echo ""
 
@@ -408,22 +318,13 @@ execute_uninstall() {
     fi
     echo ""
 
-    # Step 4: Remove backups directory (unless --keep-backups)
-    if ! $KEEP_BACKUPS; then
-        log_info "Removing backups directory..."
-        remove_backups_dir
-    else
-        log_info "Keeping backups directory (--keep-backups)"
-    fi
-    echo ""
-
     # Summary
     if $DRY_RUN; then
         log_info "=== Dry-run complete. No changes were made. ==="
     else
         log_success "=== Uninstall complete! ==="
         echo ""
-        echo "Your shell configuration has been restored to the original state."
+        echo "Dotfiles configuration has been removed."
         echo "Start a new terminal session to use the default shell configuration."
     fi
 }
@@ -435,11 +336,9 @@ main() {
     local installed
     installed=($(detect_installed_dotfiles))
     local has_dotfiles_dir=false
-    local has_backups_dir=false
     [ -d "$DOTFILES_DIR" ] && has_dotfiles_dir=true
-    [ -d "$BACKUPS_DIR" ] && has_backups_dir=true
 
-    if [ ${#installed[@]} -eq 0 ] && ! $has_dotfiles_dir && ! $has_backups_dir; then
+    if [ ${#installed[@]} -eq 0 ] && ! $has_dotfiles_dir; then
         log_info "No dotfiles installation detected. Nothing to uninstall."
         exit 0
     fi
