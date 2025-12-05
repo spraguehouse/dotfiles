@@ -78,8 +78,9 @@ alias ssha='eval $(ssh-agent) && ssh-add'
 # start
 start() { nohup $1 &> /dev/null & disown; }
 
-# sv
+# sv*
 alias sv='standard-version'
+alias svp='sv; git push --follow-tags origin main'
 
 # tree
 alias tree='tree -I ".git|node_modules"'
