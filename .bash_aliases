@@ -5,6 +5,10 @@ alias azoy="az config set core.output=yamlc >/dev/null 2>&1; echo 'az cli defaul
 alias azot="az config set core.output=table >/dev/null 2>&1; echo 'az cli default output set to: table'"
 
 #
+# aw*
+alias awjb='arrange-windows "JetBrains Rider"'
+
+#
 # cd(n)
 alias cd="z"
 alias cd1="cd .."
