@@ -52,3 +52,8 @@ export PATH="${PATH}:${HOME}/.local/bin"
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+# Claude Code worktree helpers (wt, wt-new, wt-finish, wt-status, wt-rm, wt-list, wt-claude)
+if [ -f ~/.claude/scripts/worktree-shell-helpers.sh ]; then
+  source ~/.claude/scripts/worktree-shell-helpers.sh
+fi
