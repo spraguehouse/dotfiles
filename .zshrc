@@ -57,6 +57,3 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 if [ -f ~/.claude/scripts/worktree-shell-helpers.sh ]; then
   source ~/.claude/scripts/worktree-shell-helpers.sh
 fi
-if [ -f ~/.claude/scripts/wt-aliases.sh ]; then
-  source ~/.claude/scripts/wt-aliases.sh
-fi
