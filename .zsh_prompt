@@ -93,7 +93,7 @@ setopt PROMPT_SUBST  # enable command substitution in the prompt
 PS1="%{$userStyle%}%n%{$reset%}@%{$yellow%}%m%{$reset%}" # user@host
 PS1+='$(prompt_k8s)$(prompt_azure_subscription)' # special
 PS1+=":%{$fg[green]%}%~%{$reset%}" # path
-PS1+="%{$white%}λ %{$reset%}" # prompt
+PS1+="%{$fg[blue]%}λ %{$reset%}" # prompt
 export PS1
 
 PS2="%{$yellow%}→ %{$reset%}"
