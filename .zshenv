@@ -1,6 +1,13 @@
 # This file is sourced by zsh in ALL shells (interactive and non-interactive)
 # Only put environment variables and essential tools here
 
+# Homebrew - set up PATH early (Apple Silicon vs Intel Macs)
+if [[ -f /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [[ -f /usr/local/bin/brew ]]; then
+  eval "$(/usr/local/bin/brew shellenv)"
+fi
+
 # Android SDK
 export ANDROID_HOME="$HOME/Library/Android/sdk"
 export PATH="$PATH:$ANDROID_HOME/platform-tools:$ANDROID_HOME/tools"
