@@ -27,6 +27,9 @@ ASALocalRun/
 # Ignore all .claude directories everywhere (nested and root)
 **/.claude/
 
+# ADW workflow marker (created during automated runs)
+.adw-mode
+
 # Manually `git add -f` any files you want to keep, such as:
 # - .claude/commands/
 # - .claude/settings.json
