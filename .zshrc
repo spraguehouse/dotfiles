@@ -45,6 +45,7 @@ fi
 setopt INTERACTIVE_COMMENTS
 
 export PATH="${PATH}:${HOME}/.local/bin"
+export PATH="$HOME/.claude/bin:$PATH"
 
 # bun completions
 [ -s "/Users/jsprague/.bun/_bun" ] && source "/Users/jsprague/.bun/_bun"
@@ -53,7 +54,5 @@ export PATH="${PATH}:${HOME}/.local/bin"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
-# Claude Code worktree helpers (wt, wt-new, wt-finish, wt-status, wt-rm, wt-list, wt-claude)
-if [ -f ~/.claude/scripts/worktree-shell-helpers.sh ]; then
-  source ~/.claude/scripts/worktree-shell-helpers.sh
-fi
+# Claude ecosystem initialization
+[ -f ~/.claude/init.sh ] && source ~/.claude/init.sh
