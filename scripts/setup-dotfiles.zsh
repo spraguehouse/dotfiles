@@ -97,6 +97,15 @@ symlink .p10k.zsh
 symlink .gitconfig
 symlink .gitignore
 
+#
+# Create user bin directory and python symlink
+#
+
+mkdir -p ~/.local/bin
+if command -v python3 &>/dev/null; then
+  ln -sf "$(command -v python3)" ~/.local/bin/python
+fi
+
 mkdir -p ~/.zsh && cd ~/.zsh
 curl -o git-completion.bash https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
 curl -o _git https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh
