@@ -19,7 +19,26 @@ alias cd5="cd ../../../../../"
 
 # cc
 alias cc='claude'
-alias ccy='claude --dangerously-skip-permissions'
+# ccy: claude with bypass permissions, optionally with auto-prompt
+# Usage: ccy              - interactive claude (bypass mode)
+#        ccy -p "prompt"  - launch in tmux, auto-send prompt
+ccy() {
+    if [[ "$1" == "-p" && -n "$2" ]]; then
+        local prompt="$2"
+        local session="ccy-$(date +%s)"
+        # Create detached tmux session running claude
+        tmux new-session -d -s "$session" "claude --dangerously-skip-permissions"
+        # Wait for claude to initialize
+        sleep 1.5
+        # Send the prompt, then enter separately
+        tmux send-keys -t "$session" "$prompt"
+        tmux send-keys -t "$session" Enter
+        # Attach to the session
+        tmux attach -t "$session"
+    else
+        claude --dangerously-skip-permissions "$@"
+    fi
+}
 
 # d*
 alias d='docker'
