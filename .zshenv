@@ -25,3 +25,6 @@ fi
 if command -v zoxide >/dev/null 2>&1; then
   eval "$(zoxide init zsh)"
 fi
+
+# Garden Analytics
+export GARDEN_DISABLE_ANALYTICS=true
