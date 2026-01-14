@@ -6,6 +6,7 @@ alias azot="az config set core.output=table >/dev/null 2>&1; echo 'az cli defaul
 
 #
 # aw*
+alias awc='arrange-windows code'
 alias awjb='arrange-windows "JetBrains Rider"'
 
 #
