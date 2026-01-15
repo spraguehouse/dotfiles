@@ -19,14 +19,13 @@ alias cd4="cd ../../../../"
 alias cd5="cd ../../../../../"
 
 # cc
-alias cc='claude'
-# ccy: claude with bypass permissions, optionally with auto-prompt
-# Usage: ccy              - interactive claude (bypass mode)
-#        ccy -p "prompt"  - launch in tmux, auto-send prompt
-ccy() {
+# cc: claude with bypass permissions, optionally with auto-prompt
+# Usage: cc              - interactive claude (bypass mode)
+#        cc -p "prompt"  - launch in tmux, auto-send prompt
+cc() {
     if [[ "$1" == "-p" && -n "$2" ]]; then
         local prompt="$2"
-        local session="ccy-$(date +%s)"
+        local session="cc-$(date +%s)"
         # Create detached tmux session running claude
         tmux new-session -d -s "$session" "claude --dangerously-skip-permissions"
         # Wait for claude to initialize
