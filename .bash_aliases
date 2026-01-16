@@ -58,7 +58,10 @@ fi
 # flushdns
 alias flushdns='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
 
-# gp
+# ghpr* (gh pull request)
+alias ghprdevtomain='gh pr create --base main --head dev --title "Merge dev to main"'
+
+# g* (git)
 alias gp='git push --follow-tags origin main'
 
 #
