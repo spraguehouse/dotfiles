@@ -18,7 +18,8 @@ if [ -f /usr/bin/kubectl ] || [ -f /usr/local/bin/kubectl ]; then
   kubectl completion bash | bash
 fi
 
-# Initialize zoxide (provides 'z' and aliases 'cd' to it)
+# Initialize zoxide and replace 'cd' with it (--cmd cd creates cd/cdi functions)
+# When zoxide is not installed, 'cd' falls back to builtin
 if command -v zoxide &> /dev/null; then
-  eval "$(zoxide init bash)"
+  eval "$(zoxide init bash --cmd cd)"
 fi

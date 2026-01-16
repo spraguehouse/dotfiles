@@ -20,10 +20,11 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 
-# Initialize zoxide (provides 'z' and aliases 'cd' to it)
+# Initialize zoxide and replace 'cd' with it (--cmd cd creates cd/cdi functions)
+# When zoxide is not installed, 'cd' falls back to builtin
 # Supports multiple installation locations: Homebrew (macOS), apt (Linux), cargo (manual install)
 if command -v zoxide >/dev/null 2>&1; then
-  eval "$(zoxide init zsh)"
+  eval "$(zoxide init zsh --cmd cd)"
 fi
 
 # Garden Analytics

@@ -10,8 +10,7 @@ alias awc='arrange-windows code'
 alias awjb='arrange-windows "JetBrains Rider"'
 
 #
-# cd(n)
-alias cd="z"
+# cd(n) - cd is aliased to zoxide's 'z' via zoxide init --cmd cd in .bashrc
 alias cd1="cd .."
 alias cd2="cd ../../"
 alias cd3="cd ../../../"

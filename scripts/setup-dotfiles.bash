@@ -13,10 +13,12 @@ if [ -x "$(command -v apt-get)" ]; then
     apt-get install git -y
   fi
 
-  # Install zoxide if missing
+  # Install zoxide if missing (use official installer - more reliable than apt)
   if ! [ -x "$(command -v zoxide)" ]; then
-    echo "Installing zoxide..."
-    apt-get install zoxide -y
+    echo "Installing zoxide via official installer..."
+    curl -sS https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | bash
+    # Ensure ~/.local/bin is on PATH for current session
+    export PATH="$HOME/.local/bin:$PATH"
   fi
 
   # Install Azure CLI if missing
