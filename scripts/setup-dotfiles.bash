@@ -41,7 +41,9 @@ if [ -d ~/dotfiles ]; then
   cd ~/dotfiles
   if [ -d .git ]; then
     echo "Directory ~/dotfiles is a git repository. Pulling latest changes..."
-    git stash -u && git pull && git stash pop || { echo "Pulling changes failed. Exiting script."; exit 1; }
+    git stash -u
+    git pull || { echo "Pulling changes failed. Exiting script."; exit 1; }
+    git stash pop 2>/dev/null || true  # OK if nothing was stashed
   else
     echo "Directory ~/dotfiles is not a git repository. Removing directory and cloning..."
     cd ~
