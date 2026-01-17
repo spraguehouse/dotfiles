@@ -18,25 +18,15 @@ alias cd4="cd ../../../../"
 alias cd5="cd ../../../../../"
 
 # cc
-# cc: claude with bypass permissions, optionally with auto-prompt
+# cc: claude with bypass permissions
 # Usage: cc              - interactive claude (bypass mode)
-#        cc -p "prompt"  - launch in tmux, auto-send prompt
+#        cc "prompt"     - start with initial prompt
+#        cc -p "prompt"  - same as above (legacy -p flag)
 cc() {
-    if [[ "$1" == "-p" && -n "$2" ]]; then
-        local prompt="$2"
-        local session="cc-$(date +%s)"
-        # Create detached tmux session running claude
-        tmux new-session -d -s "$session" "claude --dangerously-skip-permissions"
-        # Wait for claude to initialize
-        sleep 1.5
-        # Send the prompt, then enter separately
-        tmux send-keys -t "$session" "$prompt"
-        tmux send-keys -t "$session" Enter
-        # Attach to the session
-        tmux attach -t "$session"
-    else
-        claude --dangerously-skip-permissions "$@"
+    if [[ "$1" == "-p" ]]; then
+        shift  # Remove -p, pass rest as prompt
     fi
+    claude --dangerously-skip-permissions "$@"
 }
 
 # d*
