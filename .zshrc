@@ -45,6 +45,7 @@ fi
 setopt INTERACTIVE_COMMENTS
 
 export PATH="${PATH}:${HOME}/.local/bin"
+export PATH="$HOME/.dotnet/tools:$PATH"
 export PATH="$HOME/.claude/bin:$PATH"
 
 # bun completions
