@@ -9,6 +9,11 @@
 PublishScripts/
 *.azurePubxml
 
+# dev.sh state files
+.dev-state/
+.dev-initialized
+.dev-compose-generated.yml
+
 # Microsoft Azure Build Output
 csx/
 *.build.csdef
