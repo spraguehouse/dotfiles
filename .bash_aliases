@@ -93,9 +93,9 @@ alias mk='minikube'
 if [[ $OSTYPE != 'darwin'* ]]; then alias open="xdg-open"; fi
 
 # p
-alias p='pi -ne -e extensions/cross-agent.ts -e extensions/subagent-widget.ts -e extensions/pure-focus.ts'
-alias pac='p -e extensions/agent-chain.ts'
-alias pipi='p -e extensions/pi-pi.ts'
+alias p='pi -ne -e ~/.pi/extensions/cross-agent.ts -e ~/.pi/extensions/subagent-widget.ts -e ~/.pi/extensions/pure-focus.ts'
+alias pac='p -e ~/.pi/extensions/agent-chain.ts'
+alias pipi='p -e ~/.pi/extensions/pi-pi.ts'
 
 # path
 alias path='echo -e ${PATH//:/\\n}'
