@@ -65,7 +65,227 @@ fi
 alias flushdns='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
 
 # ghpr* (gh pull request)
-alias ghprdevtomain='gh pr create --base main --head dev --title "Merge dev to main"'
+# Creates per-scope PRs from dev→main with auto-generated squash commit titles.
+# Commits are grouped by conventional commit scope, cherry-picked onto merge/<scope>
+# branches from main, and opened as individual PRs in the browser.
+ghprdevtomain() {
+    git fetch origin main dev --quiet 2>/dev/null
+
+    # Guard: if main has commits not in dev, sync first to avoid duplicate cherry-picks
+    local main_ahead
+    main_ahead=$(git rev-list --count origin/dev..origin/main 2>/dev/null || echo 0)
+    if [[ "$main_ahead" -gt 0 ]]; then
+        echo "main is ${main_ahead} commit(s) ahead of dev (likely from prior squash merges)."
+        echo "Sync first: ghprdevsync"
+        return 1
+    fi
+
+    # Use ancestry-path from merge-base to exclude commits already squash-merged.
+    # After merging main into dev, commits before the sync point are not descendants
+    # of the merge-base and are automatically excluded.
+    local merge_base
+    merge_base=$(git merge-base origin/main origin/dev)
+
+    local commits
+    commits=$(git log --ancestry-path --no-merges --format="%H %s" --reverse ${merge_base}..origin/dev)
+    if [[ -z "$commits" ]]; then
+        # Check if there are actual file differences (commits made before sync)
+        local has_diff
+        has_diff=$(git diff --stat origin/main..origin/dev 2>/dev/null)
+        if [[ -n "$has_diff" ]]; then
+            echo "No ancestry-path commits, but dev has changes vs main:"
+            echo "$has_diff"
+            echo ""
+            echo "This happens when commits were made BEFORE syncing dev with main."
+            echo "The --ancestry-path filter excludes pre-sync commits."
+            echo ""
+            echo "Options:"
+            echo "  1. Create PR manually:"
+            echo "     gh pr create --base main --head dev --title \"fix(scope): description\""
+            echo ""
+            echo "  2. See all commits (may include already-released):"
+            echo "     git log --no-merges --oneline origin/main..origin/dev"
+            return 1
+        fi
+        echo "No commits on dev ahead of main. Nothing to PR."
+        return 1
+    fi
+
+    echo "Commits on dev → main:"
+    echo "────────────────────────────────"
+    git log --ancestry-path --no-merges --oneline --reverse ${merge_base}..origin/dev
+    echo "────────────────────────────────"
+    echo ""
+
+    # Warn about scopeless commits (excluded from PRs)
+    local scopeless
+    scopeless=$(echo "$commits" | grep -vE '^[a-f0-9]+ [a-z]+!?\([^)]+\):')
+    if [[ -n "$scopeless" ]]; then
+        echo "WARNING: commits without scope (excluded from PRs):"
+        echo "$scopeless" | awk '{hash=substr($1,1,8); $1=""; sub(/^ /,""); print "  " hash " " $0}'
+        echo ""
+    fi
+
+    # Extract unique scopes
+    local scopes
+    scopes=$(echo "$commits" | sed -nE 's/^[a-f0-9]+ [a-z]+!?\(([^)]+)\):.*/\1/p' | sort -u)
+    if [[ -z "$scopes" ]]; then
+        echo "No conventional commit scopes found. Cannot auto-split."
+        return 1
+    fi
+
+    # Type priority (highest first)
+    local -a type_pri=('feat!' feat fix perf refactor chore docs style test ci build)
+
+    # --- Single scope: direct merge (preserves original SHAs) ---
+    local scope_count
+    scope_count=$(echo "$scopes" | wc -l | tr -d ' ')
+    if [[ "$scope_count" -eq 1 ]]; then
+        local scope types best_type msgs title_msg title
+        scope=$(echo "$scopes" | head -1)
+        types=$(echo "$commits" | sed -E 's/^[a-f0-9]+ ([a-z]+!?)\(.*/\1/')
+        best_type=""
+        for t in "${type_pri[@]}"; do
+            if echo "$types" | grep -qx "$t"; then best_type="$t"; break; fi
+        done
+        [[ -z "$best_type" ]] && best_type=$(echo "$types" | head -1)
+        msgs=$(echo "$commits" | grep -F "${best_type}(${scope}):" | sed -E "s/^[a-f0-9]+ [a-z]+!?\([^)]+\): //")
+        title_msg=$(echo "$msgs" | paste -sd ", " -)
+        title="${best_type}(${scope}): ${title_msg}"
+
+        echo "Single scope detected — direct dev→main merge (no cherry-pick)."
+        echo ""
+        echo "PR title: ${title}"
+        echo ""
+        printf "Create PR and open in browser? [Y/n] "
+        read confirm
+        if [[ "$confirm" =~ ^[Nn]$ ]]; then
+            echo "Aborted."
+            return 1
+        fi
+
+        git push origin dev --quiet 2>/dev/null
+        gh pr create --base main --head dev --title "$title" --body "## Commits
+$(echo "$commits" | awk '{hash=substr($1,1,8); $1=""; sub(/^ /,""); print "- " hash " " $0}')" --web
+        echo ""
+        echo "Done. Regular-merge the PR in browser (preserves commit history)."
+        echo "Then run: ghprdevsync"
+        return 0
+    fi
+
+    # --- Multiple scopes: cherry-pick per scope ---
+    echo "Planned PRs:"
+    while IFS= read -r scope; do
+        local scope_commits types best_type msgs title_msg
+        scope_commits=$(echo "$commits" | grep -F "(${scope}):")
+        types=$(echo "$scope_commits" | sed -E 's/^[a-f0-9]+ ([a-z]+!?)\(.*/\1/')
+        best_type=""
+        for t in "${type_pri[@]}"; do
+            if echo "$types" | grep -qx "$t"; then best_type="$t"; break; fi
+        done
+        [[ -z "$best_type" ]] && best_type=$(echo "$types" | head -1)
+        msgs=$(echo "$scope_commits" | grep -F "${best_type}(${scope}):" | sed -E "s/^[a-f0-9]+ [a-z]+!?\([^)]+\): //")
+        title_msg=$(echo "$msgs" | paste -sd ", " -)
+        echo "  ${best_type}(${scope}): ${title_msg}"
+    done <<< "$scopes"
+
+    echo ""
+    printf "Create PRs and open in browser? [Y/n] "
+    read confirm
+    if [[ "$confirm" =~ ^[Nn]$ ]]; then
+        echo "Aborted."
+        return 1
+    fi
+
+    # --- Execute phase ---
+    local original_branch
+    original_branch=$(git branch --show-current)
+
+    while IFS= read -r scope; do
+        local scope_commits hashes types best_type msgs title_msg title body_lines body branch
+        scope_commits=$(echo "$commits" | grep -F "(${scope}):")
+        hashes=$(echo "$scope_commits" | awk '{print $1}')
+        types=$(echo "$scope_commits" | sed -E 's/^[a-f0-9]+ ([a-z]+!?)\(.*/\1/')
+        best_type=""
+        for t in "${type_pri[@]}"; do
+            if echo "$types" | grep -qx "$t"; then best_type="$t"; break; fi
+        done
+        [[ -z "$best_type" ]] && best_type=$(echo "$types" | head -1)
+        msgs=$(echo "$scope_commits" | grep -F "${best_type}(${scope}):" | sed -E "s/^[a-f0-9]+ [a-z]+!?\([^)]+\): //")
+        title_msg=$(echo "$msgs" | paste -sd ", " -)
+        title="${best_type}(${scope}): ${title_msg}"
+
+        body_lines=$(echo "$scope_commits" | awk '{hash=substr($1,1,8); $1=""; sub(/^ /,""); print "- " hash " " $0}')
+        body="## Commits
+${body_lines}"
+
+        branch="merge/${scope}"
+        echo "Creating ${branch}..."
+        git branch -D "$branch" 2>/dev/null || true
+        git checkout -b "$branch" origin/main --quiet
+
+        while IFS= read -r hash; do
+            if ! git cherry-pick "$hash" --quiet 2>/dev/null; then
+                echo "  ERROR: cherry-pick failed for $(echo $hash | cut -c1-8)"
+                git cherry-pick --abort 2>/dev/null
+                git checkout "${original_branch:-dev}" --quiet 2>/dev/null
+                return 1
+            fi
+        done <<< "$hashes"
+
+        git push origin "$branch" --force --quiet 2>/dev/null
+        gh pr create --base main --head "$branch" --title "$title" --body "$body" --web
+        echo "  Created: ${title}"
+    done <<< "$scopes"
+
+    git checkout "${original_branch:-dev}" --quiet 2>/dev/null
+    echo ""
+    echo "Done. Squash-merge each PR in the browser."
+    echo "Then run: ghprdevsync"
+}
+
+# Sync dev with main after squash-merge PRs land.
+# Merges main into dev so the merge-base advances past already-squashed commits.
+# ghprdevtomain uses --ancestry-path from the merge-base, which automatically
+# excludes pre-sync commits (they aren't descendants of the new merge-base).
+ghprdevsync() {
+    git fetch origin main dev --quiet 2>/dev/null
+
+    local main_ahead
+    main_ahead=$(git rev-list --count origin/dev..origin/main 2>/dev/null || echo 0)
+    if [[ "$main_ahead" -eq 0 ]]; then
+        echo "dev is already up to date with main."
+    else
+        echo "Merging ${main_ahead} commit(s) from main into dev..."
+        git checkout dev --quiet
+        git merge origin/main --no-edit
+        git push origin dev --quiet
+        echo "dev synced with main."
+    fi
+
+    # Clean up merge/ branches (local and remote)
+    local merge_branches
+    merge_branches=$(git branch --list 'merge/*' 2>/dev/null)
+    if [[ -n "$merge_branches" ]]; then
+        echo "Cleaning up local merge branches..."
+        echo "$merge_branches" | while IFS= read -r b; do
+            b=$(echo "$b" | tr -d ' *')
+            git branch -D "$b" 2>/dev/null && echo "  Deleted local: $b"
+        done
+    fi
+
+    local remote_merge_branches
+    remote_merge_branches=$(git branch -r --list 'origin/merge/*' 2>/dev/null)
+    if [[ -n "$remote_merge_branches" ]]; then
+        echo "Cleaning up remote merge branches..."
+        echo "$remote_merge_branches" | while IFS= read -r b; do
+            b=$(echo "$b" | tr -d ' *' | sed 's|^origin/||')
+            git push origin --delete "$b" --quiet 2>/dev/null && echo "  Deleted remote: $b"
+        done
+    fi
+
+    echo "Done."
+}
 
 # g* (git)
 alias gp='git push --follow-tags origin main'
