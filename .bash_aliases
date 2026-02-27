@@ -67,6 +67,26 @@ alias flushdns='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
 
 # g* (git)
 alias gp='git push --follow-tags origin main'
+gmm() {
+    local branch
+    branch=$(git symbolic-ref --short HEAD)
+    if [[ "$branch" == "main" ]]; then
+        echo "Already on main, nothing to merge."
+        return 1
+    fi
+    echo "Merging $branch into main..."
+    git fetch \
+        && git pull \
+        && git rebase origin/main \
+        && git checkout main \
+        && git pull \
+        && git merge "$branch" --no-ff \
+        && git push \
+        && git checkout "$branch" \
+        && git rebase origin/main \
+        && git push --force-with-lease \
+        && echo "Done. $branch merged into main."
+}
 
 #
 # k*
