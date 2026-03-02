@@ -11,7 +11,7 @@ brews=(
   "jq"
   "micro"
   "node"
-  "powerlevel10k"
+  "starship"
   "powershell"
   "python@3.11"
   "terraform"
@@ -92,7 +92,7 @@ symlink .zsh_profile
 symlink .zshrc
 symlink .bash_aliases
 symlink .zsh_prompt
-symlink .p10k.zsh
+mkdir -p ~/.config && symlink .config/starship.toml
 
 symlink .gitconfig
 symlink .gitignore
