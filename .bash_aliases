@@ -22,28 +22,28 @@ alias cd5="cd ../../../../../"
 # Usage: cc              - interactive claude (bypass mode)
 #        cc -p "prompt"  - launch in tmux, auto-send prompt
 cc() {
-    if [[ "$1" == "-p" && -n "$2" ]]; then
-        local prompt="$2"
-        local session="cc-$(date +%s)"
-        # Create detached tmux session running claude
-        tmux new-session -d -s "$session" "claude --dangerously-skip-permissions"
-        # Wait for claude to be ready (look for the ">" prompt)
-        local attempts=0
-        while [[ $attempts -lt 20 ]]; do
-            if tmux capture-pane -t "$session" -p 2>/dev/null | grep -q ">"; then
-                break
-            fi
-            sleep 0.5
-            ((attempts++))
-        done
-        # Send the prompt as literal text, then Enter
-        tmux send-keys -t "$session" -l "$prompt"
-        tmux send-keys -t "$session" Enter
-        # Attach to the session
-        tmux attach -t "$session"
-    else
-        claude --dangerously-skip-permissions "$@"
-    fi
+  if [[ "$1" == "-p" && -n "$2" ]]; then
+    local prompt="$2"
+    local session="cc-$(date +%s)"
+    # Create detached tmux session running claude
+    tmux new-session -d -s "$session" "claude --dangerously-skip-permissions"
+    # Wait for claude to be ready (look for the ">" prompt)
+    local attempts=0
+    while [[ $attempts -lt 20 ]]; do
+      if tmux capture-pane -t "$session" -p 2>/dev/null | grep -q ">"; then
+        break
+      fi
+      sleep 0.5
+      ((attempts++))
+    done
+    # Send the prompt as literal text, then Enter
+    tmux send-keys -t "$session" -l "$prompt"
+    tmux send-keys -t "$session" Enter
+    # Attach to the session
+    tmux attach -t "$session"
+  else
+    claude --dangerously-skip-permissions "$@"
+  fi
 }
 
 # d*
@@ -57,35 +57,38 @@ alias dill='d image ls -a'
 alias dps='d ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"'
 
 # dotfiles-update
-if [[ $OSTYPE == 'darwin'* ]]; then alias dotfiles-update='cd ~ && curl -L https://raw.githubusercontent.com/spraguehouse/dotfiles/main/scripts/setup-dotfiles.zsh -o setup-dotfiles.zsh && source setup-dotfiles.zsh'
-else alias dotfiles-update='cd ~ && curl -L https://raw.githubusercontent.com/spraguehouse/dotfiles/main/scripts/setup-dotfiles.bash -o setup-dotfiles.bash && source setup-dotfiles.bash'
+if [[ $OSTYPE == 'darwin'* ]]; then
+  alias dotfiles-update='cd ~ && curl -L https://raw.githubusercontent.com/spraguehouse/dotfiles/main/scripts/setup-dotfiles.zsh -o setup-dotfiles.zsh && source setup-dotfiles.zsh'
+else
+  alias dotfiles-update='cd ~ && curl -L https://raw.githubusercontent.com/spraguehouse/dotfiles/main/scripts/setup-dotfiles.bash -o setup-dotfiles.bash && source setup-dotfiles.bash'
 fi
 
 # flushdns
 alias flushdns='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
 
-
 # g* (git)
+alias gl='git lg'
+alias gls='git lg -15'
 alias gp='git push --follow-tags origin main'
 gmm() {
-    local branch
-    branch=$(git symbolic-ref --short HEAD)
-    if [[ "$branch" == "main" ]]; then
-        echo "Already on main, nothing to merge."
-        return 1
-    fi
-    echo "Merging $branch into main..."
-    git fetch \
-        && git pull \
-        && git rebase origin/main \
-        && git checkout main \
-        && git pull \
-        && git merge "$branch" --no-ff \
-        && git push \
-        && git checkout "$branch" \
-        && git rebase origin/main \
-        && git push --force-with-lease \
-        && echo "Done. $branch merged into main."
+  local branch
+  branch=$(git symbolic-ref --short HEAD)
+  if [[ "$branch" == "main" ]]; then
+    echo "Already on main, nothing to merge."
+    return 1
+  fi
+  echo "Merging $branch into main..."
+  git fetch &&
+    git pull &&
+    git rebase origin/main &&
+    git checkout main &&
+    git pull &&
+    git merge "$branch" --no-ff &&
+    git push &&
+    git checkout "$branch" &&
+    git rebase origin/main &&
+    git push --force-with-lease &&
+    echo "Done. $branch merged into main."
 }
 
 #
@@ -99,7 +102,8 @@ if [[ $SHELL != '/bin/zsh'* ]]; then complete -F __start_kubectl k; fi
 
 #
 # l*
-if [[ $OSTYPE == 'darwin'* ]]; then alias l="ls -cl -hp --color=always"
+if [[ $OSTYPE == 'darwin'* ]]; then
+  alias l="ls -cl -hp --color=always"
 else alias l="ls -cl -hp --time-style=long-iso --group-directories-first --color=always"; fi
 alias ll="l -a"
 
@@ -124,11 +128,19 @@ alias path='echo -e ${PATH//:/\\n}'
 alias ssha='eval $(ssh-agent) && ssh-add'
 
 # start
-start() { nohup $1 &> /dev/null & disown; }
+start() {
+  nohup $1 &>/dev/null &
+  disown
+}
 
 # sv*
 alias sv='standard-version'
 alias svp='sv; git push --follow-tags origin main'
+
+# tmux
+alias t='tmux'
+alias ta='tmux attach'
+alias tl='tmux list-sessions'
 
 # tree
 alias tree='tree -I ".git|node_modules"'
