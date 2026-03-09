@@ -147,3 +147,13 @@ alias tree='tree -I ".git|node_modules"'
 
 # uuidgen
 if [[ $OSTYPE == 'darwin'* ]]; then alias uuidgen='uuidgen | tr A-F a-f'; fi
+
+# mac* - macOS configuration management
+alias mac-drift='brew bundle check --file=~/dotfiles/Brewfile'
+alias mac-sync='brew bundle install --file=~/dotfiles/Brewfile'
+
+# rc* - Claude remote control
+alias rc-start='caffeinate -dims tmux new-session -d -s claude \; send-keys "bash ~/.claude/scripts/rc-guardian.sh" Enter'
+alias rc-attach='tmux attach -t claude'
+alias rc-status='tmux capture-pane -t claude -p | tail -10'
+alias rc-logs='tail -50 ~/.claude/scripts/logs/remote-control-$(date +%Y%m%d).log'
