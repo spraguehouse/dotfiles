@@ -1,68 +1,10 @@
 #!/bin/zsh
 
-brews=(
-  "azure-cli"
-  "azure-functions-core-tools@4"
-  "bash"
-  "bicep"
-  "go"
-  "helm"
-  "iterm2"
-  "jq"
-  "micro"
-  "node"
-  "starship"
-  "powershell"
-  "python@3.11"
-  "terraform"
-  "tree"
-  "unnaturalscrollwheels"
-  "yq"
-)
-  
 # Make sure Homebrew is installed.
 if ! [ -x "$(command -v brew)" ]; then
   echo "Installing Homebrew..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
-
-#
-# Install default brews.
-#
-
-echo "Checking brew installations. This may take a minute..."
-
-draw_progress_bar() {
-  # Argument 1: current progress (integer)
-  # Argument 2: total progress (integer)
-  local current=${1}
-  local total=${2}
-  local width=50
-  local progress=$((current*100/total))
-  local filled=$((progress*width/100))
-  local empty=$((width-filled))
-
-  printf "\r["
-  printf "%0.s=" $(seq -s ' ' 1 $filled)
-  if [ $empty -gt 0 ]; then
-    printf ">"
-    printf "%0.s " $(seq -s ' ' 2 $empty)
-  fi
-  printf "] %d%%" $progress
-}
-
-totalBrews=${#brews[@]}
-brewInstallCounter=0
-for brew in "${brews[@]}"; do
-  if ! brew list "$brew" &>/dev/null; then
-    echo "Installing $brew..."
-    brew install --quiet --force "$brew"
-  fi
-  ((brewInstallCounter++))
-  draw_progress_bar brewInstallCounter "$totalBrews"
-done
-
-printf "\n"
 
 if ! [ -x "$(command -v git)" ]; then
   echo "Installing git..."
@@ -70,16 +12,27 @@ if ! [ -x "$(command -v git)" ]; then
 fi
 
 #
+# Install packages from Brewfile
+#
+
+echo "Installing packages from Brewfile..."
+brew bundle install --file=~/dotfiles/Brewfile --no-lock
+
+#
 # Install latest dotfiles repo.
 #
 
-cd ~
-rm -rf dotfiles
-git clone https://github.com/spraguehouse/dotfiles.git ~/dotfiles
+if [ -d ~/dotfiles/.git ]; then
+  echo "Updating existing dotfiles..."
+  git -C ~/dotfiles pull --rebase
+else
+  echo "Cloning dotfiles..."
+  git clone https://github.com/spraguehouse/dotfiles.git ~/dotfiles
+fi
 
 #
 # Create dot-file symlinks
-# 
+#
 
 symlink() {
   ln -sf ~/dotfiles/$1 ~/$1;
@@ -111,7 +64,7 @@ curl -o git-completion.bash https://raw.githubusercontent.com/git/git/master/con
 curl -o _git https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.zsh
 cd ~
 
-#symlink .kubecompletion.bash # todo: need a zsh completion 
+#symlink .kubecompletion.bash # todo: need a zsh completion
 
 #
 # Set or update Git username/email
@@ -155,7 +108,30 @@ else
 fi
 
 #
+# Configure macOS defaults
 #
+
+echo ""
+echo "Applying macOS defaults..."
+bash ~/dotfiles/scripts/macos-defaults.sh
+
+echo ""
+echo "Applying AC power settings..."
+bash ~/dotfiles/scripts/macos-power.sh
+
+#
+# Summary
+#
+
+echo ""
+echo "Setup complete:"
+echo "  - Packages installed via Brewfile"
+echo "  - Dotfiles symlinked"
+echo "  - Git config verified"
+echo "  - macOS defaults applied"
+echo "  - AC power settings applied"
+echo ""
+echo "Run 'mac-drift' to check for package drift at any time."
 
 rm ~/.zcompdump # clear existing autocompletion cache
 exec /bin/zsh
