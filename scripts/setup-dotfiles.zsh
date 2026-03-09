@@ -12,13 +12,6 @@ if ! [ -x "$(command -v git)" ]; then
 fi
 
 #
-# Install packages from Brewfile
-#
-
-echo "Installing packages from Brewfile..."
-brew bundle install --file=~/dotfiles/Brewfile --no-lock
-
-#
 # Install latest dotfiles repo.
 #
 
@@ -29,6 +22,13 @@ else
   echo "Cloning dotfiles..."
   git clone https://github.com/spraguehouse/dotfiles.git ~/dotfiles
 fi
+
+#
+# Install packages from Brewfile
+#
+
+echo "Installing packages from Brewfile..."
+brew bundle install --file=~/dotfiles/Brewfile --no-lock
 
 #
 # Create dot-file symlinks
