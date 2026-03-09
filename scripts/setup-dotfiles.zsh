@@ -28,7 +28,7 @@ fi
 #
 
 echo "Installing packages from Brewfile..."
-brew bundle install --file=~/dotfiles/Brewfile --no-lock
+brew bundle install --file=~/dotfiles/Brewfile
 
 #
 # Create dot-file symlinks
