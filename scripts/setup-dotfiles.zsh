@@ -70,37 +70,17 @@ cd ~
 # Set or update Git username/email
 #
 
-YELLOW='\033[1;33m'
-RESET='\033[0m'
-GIT_FULLNAME=$(git config --global --get user.name)
-GIT_EMAIL=$(git config --global --get user.email)
+GIT_FULLNAME=$(git config --global --get user.name 2>/dev/null)
+GIT_EMAIL=$(git config --global --get user.email 2>/dev/null)
 
-if [ -n "$GIT_FULLNAME" ]; then
-  echo -e "${YELLOW}Warning: Git fullname is already set to $GIT_FULLNAME. Do you want to change it? [y/N]${RESET}"
-  read CHANGE
-  if [[ "$CHANGE" =~ ^[Yy]$ ]]; then
-    echo "Enter new Git fullname:"
-    read GIT_FULLNAME
-    git config --global user.name "$GIT_FULLNAME"
-    echo "Success."
-  fi
-else
+if [ -z "$GIT_FULLNAME" ]; then
   echo "Enter Git fullname:"
   read GIT_FULLNAME
   git config --global user.name "$GIT_FULLNAME"
   echo "Success."
 fi
 
-if [ -n "$GIT_EMAIL" ]; then
-  echo -e "${YELLOW}Warning: Git email is already set to $GIT_EMAIL. Do you want to change it? [y/N]${RESET}"
-  read CHANGE
-  if [[ "$CHANGE" =~ ^[Yy]$ ]]; then
-    echo "Enter new Git email:"
-    read GIT_EMAIL
-    git config --global user.email "$GIT_EMAIL"
-    echo "Success."
-  fi
-else
+if [ -z "$GIT_EMAIL" ]; then
   echo "Enter Git email:"
   read GIT_EMAIL
   git config --global user.email "$GIT_EMAIL"
