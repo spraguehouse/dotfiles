@@ -116,10 +116,17 @@ alias mk='minikube'
 # open
 if [[ $OSTYPE != 'darwin'* ]]; then alias open="xdg-open"; fi
 
-# p
-alias p='pi -ne -e ~/.pi/extensions/cross-agent.ts -e ~/.pi/extensions/subagent-widget.ts -e ~/.pi/extensions/pure-focus.ts'
-alias pac='p -e ~/.pi/extensions/agent-chain.ts'
-alias pipi='p -e ~/.pi/extensions/pi-pi.ts'
+# cos - Chief of Staff harness (works from any directory)
+alias cos='pi -e ~/.pi/extensions/chief-of-staff.ts -e ~/.pi/extensions/damage-control.ts'
+alias cos-review='pi -e ~/.pi/extensions/chief-of-staff.ts -e ~/.pi/extensions/damage-control.ts --append-system-prompt "Run a full team review: agent output quality, behavioral drift, ADR compliance, context freshness, Secret Service threat monitoring, Inspector General structural check."'
+
+# cos-<section> - Deep focused section work sessions (works from any directory)
+# The CoS launches with a directive to dispatch a specific chief. Runs in whatever repo you're in.
+alias cos-architect='pi -e ~/.pi/extensions/chief-of-staff.ts -e ~/.pi/extensions/damage-control.ts --append-system-prompt "Dispatch the cloud-architect for autonomous section work in this repository."'
+alias cos-security='pi -e ~/.pi/extensions/chief-of-staff.ts -e ~/.pi/extensions/damage-control.ts --append-system-prompt "Dispatch the security-officer for autonomous section work in this repository."'
+alias cos-admin='pi -e ~/.pi/extensions/chief-of-staff.ts -e ~/.pi/extensions/damage-control.ts --append-system-prompt "Dispatch the chief-admin for autonomous section work in this repository."'
+alias cos-reliability='pi -e ~/.pi/extensions/chief-of-staff.ts -e ~/.pi/extensions/damage-control.ts --append-system-prompt "Dispatch the reliability-engineer for autonomous section work in this repository."'
+alias cos-infra='pi -e ~/.pi/extensions/chief-of-staff.ts -e ~/.pi/extensions/damage-control.ts --append-system-prompt "Dispatch the infra-engineer for autonomous section work in this repository."'
 
 # path
 alias path='echo -e ${PATH//:/\\n}'
