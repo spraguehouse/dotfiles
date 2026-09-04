@@ -6,8 +6,7 @@ alias azot="az config set core.output=table >/dev/null 2>&1; echo 'az cli defaul
 
 #
 # aw*
-alias awc='arrange-windows code'
-alias awjb='arrange-windows "JetBrains Rider"'
+alias awc='arrange-windows code --grid'
 
 #
 # cd(n) - cd is aliased to zoxide's 'z' via zoxide init --cmd cd in .bashrc
@@ -98,7 +97,24 @@ alias ks='echo -e "context: $(k config current-context)\nnamespace: $(k config v
 alias kc='kubechoose'
 alias kns='f(){ k config set-context --current --namespace="$@"; unset -f f; }; f'
 alias kga='kubectl get all,cm,secret,ing'
-if [[ $SHELL != '/bin/zsh'* ]]; then complete -F __start_kubectl k; fi
+# `complete` is a bash builtin. ~/.zshrc sources this aliases file too, so
+# check the RUNNING interpreter rather than $SHELL (login-shell metadata can be
+# inherited or stale in child processes).
+if [[ -n ${BASH_VERSION:-} ]]; then
+  # Homebrew installs kubectl's completion function here. Source it before
+  # registering the `k` alias completion; zsh never enters this branch.
+  for kubectl_completion in \
+    /opt/homebrew/etc/bash_completion.d/kubectl \
+    /usr/local/etc/bash_completion.d/kubectl; do
+    if [[ -r $kubectl_completion ]]; then
+      source "$kubectl_completion"
+      break
+    fi
+  done
+  if declare -F __start_kubectl >/dev/null 2>&1; then
+    complete -F __start_kubectl k
+  fi
+fi
 
 #
 # l*
@@ -115,18 +131,6 @@ alias mk='minikube'
 
 # open
 if [[ $OSTYPE != 'darwin'* ]]; then alias open="xdg-open"; fi
-
-# cos - Chief of Staff harness (works from any directory)
-alias cos='pi -e ~/.pi/extensions/chief-of-staff.ts -e ~/.pi/extensions/damage-control.ts'
-alias cos-review='pi -e ~/.pi/extensions/chief-of-staff.ts -e ~/.pi/extensions/damage-control.ts --append-system-prompt "Run a full team review: agent output quality, behavioral drift, ADR compliance, context freshness, Secret Service threat monitoring, Inspector General structural check."'
-
-# cos-<section> - Deep focused section work sessions (works from any directory)
-# The CoS launches with a directive to dispatch a specific chief. Runs in whatever repo you're in.
-alias cos-architect='pi -e ~/.pi/extensions/chief-of-staff.ts -e ~/.pi/extensions/damage-control.ts --append-system-prompt "Dispatch the cloud-architect for autonomous section work in this repository."'
-alias cos-security='pi -e ~/.pi/extensions/chief-of-staff.ts -e ~/.pi/extensions/damage-control.ts --append-system-prompt "Dispatch the security-officer for autonomous section work in this repository."'
-alias cos-admin='pi -e ~/.pi/extensions/chief-of-staff.ts -e ~/.pi/extensions/damage-control.ts --append-system-prompt "Dispatch the chief-admin for autonomous section work in this repository."'
-alias cos-reliability='pi -e ~/.pi/extensions/chief-of-staff.ts -e ~/.pi/extensions/damage-control.ts --append-system-prompt "Dispatch the reliability-engineer for autonomous section work in this repository."'
-alias cos-infra='pi -e ~/.pi/extensions/chief-of-staff.ts -e ~/.pi/extensions/damage-control.ts --append-system-prompt "Dispatch the infra-engineer for autonomous section work in this repository."'
 
 # path
 alias path='echo -e ${PATH//:/\\n}'
