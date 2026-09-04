@@ -22,3 +22,4 @@ fi
 
 # Garden Analytics
 export GARDEN_DISABLE_ANALYTICS=true
+. "$HOME/.cargo/env"
