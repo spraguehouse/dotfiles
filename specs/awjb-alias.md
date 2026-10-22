@@ -65,9 +65,9 @@ Not applicable for shell alias configuration.
 ## Validation Commands
 Execute every command to validate the feature works correctly with zero regressions.
 
-- Verify alias is syntactically correct: `bash -c "source /Users/Shared/source/spraguehouse/dotfiles/.bash_aliases && type awjb"`
-- Verify alias expands correctly: `bash -c "source /Users/Shared/source/spraguehouse/dotfiles/.bash_aliases && alias awjb"`
-- Verify zsh compatibility: `zsh -c "source /Users/Shared/source/spraguehouse/dotfiles/.bash_aliases && type awjb"`
+- Verify alias is syntactically correct: `bash -c "source /Users/josh/dotfiles/.bash_aliases && type awjb"`
+- Verify alias expands correctly: `bash -c "source /Users/josh/dotfiles/.bash_aliases && alias awjb"`
+- Verify zsh compatibility: `zsh -c "source /Users/josh/dotfiles/.bash_aliases && type awjb"`
 - Run the alias (requires JetBrains Rider to be running): `awjb` (manual test)
 
 ## Notes

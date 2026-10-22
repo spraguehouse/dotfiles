@@ -68,11 +68,11 @@ Not applicable for shell alias configuration.
 ## Validation Commands
 Execute every command to validate the feature works correctly with zero regressions.
 
-- Verify alias is syntactically correct in bash: `bash -c "source /Users/Shared/source/spraguehouse/dotfiles/.bash_aliases && type svp"`
-- Verify alias expands correctly in bash: `bash -c "source /Users/Shared/source/spraguehouse/dotfiles/.bash_aliases && alias svp"`
-- Verify alias is syntactically correct in zsh: `zsh -c "source /Users/Shared/source/spraguehouse/dotfiles/.bash_aliases && type svp"`
-- Verify alias expands correctly in zsh: `zsh -c "source /Users/Shared/source/spraguehouse/dotfiles/.bash_aliases && alias svp"`
-- Verify all existing aliases still work: `bash -c "source /Users/Shared/source/spraguehouse/dotfiles/.bash_aliases && alias sv && alias gp"`
+- Verify alias is syntactically correct in bash: `bash -c "source /Users/josh/dotfiles/.bash_aliases && type svp"`
+- Verify alias expands correctly in bash: `bash -c "source /Users/josh/dotfiles/.bash_aliases && alias svp"`
+- Verify alias is syntactically correct in zsh: `zsh -c "source /Users/josh/dotfiles/.bash_aliases && type svp"`
+- Verify alias expands correctly in zsh: `zsh -c "source /Users/josh/dotfiles/.bash_aliases && alias svp"`
+- Verify all existing aliases still work: `bash -c "source /Users/josh/dotfiles/.bash_aliases && alias sv && alias gp"`
 
 ## Notes
 - The alias name `svp` follows the pattern of the existing `sv` alias with `p` for "push", making it intuitive and memorable

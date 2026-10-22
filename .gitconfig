@@ -61,9 +61,9 @@
 	name = Joshua Sprague
 	email = joshua.spragu3@gmail.com
 [safe]
-	directory = /Users/Shared/source/personal/*
-	directory = /Users/Shared/source/tac/*
-	directory = /Users/Shared/source/dcienterprise/*
-	directory = /Users/Shared/source/infiniteloopstudio/*
-	directory = /Users/Shared/source/gitlab.dcim.com/*
-	directory = /Users/Shared/source/spraguehouse/*
+	directory = /Users/josh/source/personal/*
+	directory = /Users/josh/source/tac/*
+	directory = /Users/josh/source/dcienterprise/*
+	directory = /Users/josh/source/infiniteloopstudio/*
+	directory = /Users/josh/source/gitlab.dcim.com/*
+	directory = /Users/josh/source/spraguehouse/*
