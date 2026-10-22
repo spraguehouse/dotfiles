@@ -115,6 +115,9 @@ start() {
   disown
 }
 
+# commit: group pending changes into checked commits
+alias commit='release-damnit commit'
+
 # sv* (standard-version runs through npx; nothing to install)
 alias sv='npx --yes standard-version'
 alias svp='sv && git push --follow-tags origin main'
