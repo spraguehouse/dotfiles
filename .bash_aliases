@@ -115,6 +115,10 @@ start() {
   disown
 }
 
+# sv* (standard-version runs through npx; nothing to install)
+alias sv='npx --yes standard-version'
+alias svp='sv && git push --follow-tags origin main'
+
 # tmux
 alias t='tmux'
 alias ta='tmux attach'
