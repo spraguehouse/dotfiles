@@ -41,10 +41,9 @@ symlink() {
 symlink .profile
 
 symlink .zshenv
-symlink .zsh_profile
+symlink .zprofile
 symlink .zshrc
 symlink .bash_aliases
-symlink .zsh_prompt
 mkdir -p ~/.config && symlink .config/starship.toml
 
 symlink .gitconfig
@@ -85,6 +84,16 @@ if [ -z "$GIT_EMAIL" ]; then
   read GIT_EMAIL
   git config --global user.email "$GIT_EMAIL"
   echo "Success."
+fi
+
+#
+# Point agent harnesses at ~/.ion when it is installed
+#
+
+if [ -x ~/.ion/scripts/link-agents.sh ]; then
+  echo ""
+  echo "Linking agent harnesses to ~/.ion..."
+  ~/.ion/scripts/link-agents.sh
 fi
 
 #
