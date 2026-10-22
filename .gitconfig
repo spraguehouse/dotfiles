@@ -67,3 +67,5 @@
 	directory = /Users/josh/source/infiniteloopstudio/*
 	directory = /Users/josh/source/gitlab.dcim.com/*
 	directory = /Users/josh/source/spraguehouse/*
+[url "git@github.com:"]
+	insteadOf = https://github.com/
