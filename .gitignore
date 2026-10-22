@@ -26,21 +26,15 @@ rcf/
 ASALocalRun/
 
 #
-# Claude Code
+# Agents
 #
 
 # Ignore all .claude directories everywhere (nested and root)
 **/.claude/
 
-# ADW workflow marker (created during automated runs)
-.adw-mode
-
-# Manually `git add -f` any files you want to keep, such as:
-# - .claude/commands/
-# - .claude/settings.json
-# - .claude/skills/
-# - .claude/hooks/
-# - .claude/agents/*.md (agent definitions)
+# AGENTS.md is the only instruction file. A CLAUDE.md is only ever a local
+# link to it, so none is ever committed.
+CLAUDE.md
 
 #
 # Docker
@@ -425,22 +419,3 @@ token.json
 
 # Jarvis OAuth helper script
 workloads/jarvis/get_google_token.py
-
-# Claude Code ephemeral data (auto-added by ADW)
-.claude/data/
-.claude/logs/
-.claude/debug/
-.claude/ide/
-.claude/plans/
-.claude/projects/
-.claude/todos/
-.claude/file-history/
-.claude/history.jsonl
-.claude/user_workspaces/
-.claude/shell-snapshots/
-.claude/statsig/
-.claude/hooks/.state/
-.claude/agents/context-bundles/auto-*.md
-.claude/agents/[a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9]/
-.claude/settings.local.json
-logs/
