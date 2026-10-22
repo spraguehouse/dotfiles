@@ -16,34 +16,8 @@ alias cd3="cd ../../../"
 alias cd4="cd ../../../../"
 alias cd5="cd ../../../../../"
 
-# cc
-# cc: claude with bypass permissions (uses Max Pro subscription, not API tokens)
-# Usage: cc              - interactive claude (bypass mode)
-#        cc -p "prompt"  - launch in tmux, auto-send prompt
-cc() {
-  if [[ "$1" == "-p" && -n "$2" ]]; then
-    local prompt="$2"
-    local session="cc-$(date +%s)"
-    # Create detached tmux session running claude
-    tmux new-session -d -s "$session" "claude --dangerously-skip-permissions"
-    # Wait for claude to be ready (look for the ">" prompt)
-    local attempts=0
-    while [[ $attempts -lt 20 ]]; do
-      if tmux capture-pane -t "$session" -p 2>/dev/null | grep -q ">"; then
-        break
-      fi
-      sleep 0.5
-      ((attempts++))
-    done
-    # Send the prompt as literal text, then Enter
-    tmux send-keys -t "$session" -l "$prompt"
-    tmux send-keys -t "$session" Enter
-    # Attach to the session
-    tmux attach -t "$session"
-  else
-    claude --dangerously-skip-permissions "$@"
-  fi
-}
+# cc: Claude Code without permission prompts
+alias cc='claude --dangerously-skip-permissions'
 
 # d*
 alias d='docker'
@@ -123,9 +97,6 @@ if [[ $OSTYPE == 'darwin'* ]]; then
 else alias l="ls -cl -hp --time-style=long-iso --group-directories-first --color=always"; fi
 alias ll="l -a"
 
-# ma-observe (multi-agent observability)
-alias ma-observe='f(){ if [ "$1" = "start" ]; then ~/.claude/observability/start.sh; elif [ "$1" = "stop" ]; then ~/.claude/observability/stop.sh; elif [ "$1" = "logs" ]; then tail -f ~/.claude/observability/server.log; elif [ "$1" = "dashboard" ]; then open http://localhost:5173; else echo "Usage: ma-observe [start|stop|logs|dashboard]"; fi; unset -f f; }; f'
-
 # mk
 alias mk='minikube'
 
@@ -144,10 +115,6 @@ start() {
   disown
 }
 
-# sv*
-alias sv='standard-version'
-alias svp='sv; git push --follow-tags origin main'
-
 # tmux
 alias t='tmux'
 alias ta='tmux attach'
@@ -163,8 +130,3 @@ if [[ $OSTYPE == 'darwin'* ]]; then alias uuidgen='uuidgen | tr A-F a-f'; fi
 alias mac-drift='brew bundle check --file=~/dotfiles/Brewfile'
 alias mac-sync='brew bundle install --file=~/dotfiles/Brewfile'
 
-# rc* - Claude remote control
-alias rc-start='caffeinate -dims tmux new-session -d -s claude \; send-keys "bash ~/.claude/scripts/rc-guardian.sh" Enter'
-alias rc-attach='tmux attach -t claude'
-alias rc-status='tmux capture-pane -t claude -p | tail -10'
-alias rc-logs='tail -50 ~/.claude/scripts/logs/remote-control-$(date +%Y%m%d).log'
