@@ -1,4 +1,6 @@
 #!/bin/bash
+# Usage: source setup-dotfiles.bash [profile]
+# The profile is home or work. Without one, the linked profile is kept or you are asked.
 
 # Install required dependencies
 if [ -x "$(command -v apt-get)" ]; then
@@ -74,49 +76,16 @@ symlink .bash_prompt
 
 symlink .gitconfig
 symlink .gitignore
-symlink .gitcompletion.bash
 
 symlink .kubecompletion.bash
 
 #
 #
 
+bash ~/dotfiles/scripts/link-profile.sh "${1:-}"
+
 YELLOW='\033[1;33m'
 RESET='\033[0m'
-GIT_FULLNAME=$(git config --global --get user.name)
-GIT_EMAIL=$(git config --global --get user.email)
-
-if [ -n "$GIT_FULLNAME" ]; then
-  echo -e "${YELLOW}Warning: Git fullname is already set to $GIT_FULLNAME. Do you want to change it? [y/N]${RESET}"
-  read CHANGE
-  if [[ "$CHANGE" =~ ^[Yy]$ ]]; then
-    echo "Enter new Git fullname:"
-    read GIT_FULLNAME
-    git config --global user.name "$GIT_FULLNAME"
-    echo "Success."
-  fi
-else
-  echo "Enter Git fullname:"
-  read GIT_FULLNAME
-  git config --global user.name "$GIT_FULLNAME"
-  echo "Success."
-fi
-
-if [ -n "$GIT_EMAIL" ]; then
-  echo -e "${YELLOW}Warning: Git email is already set to $GIT_EMAIL. Do you want to change it? [y/N]${RESET}"
-  read CHANGE
-  if [[ "$CHANGE" =~ ^[Yy]$ ]]; then
-    echo "Enter new Git email:"
-    read GIT_EMAIL
-    git config --global user.email "$GIT_EMAIL"
-    echo "Success."
-  fi
-else
-  echo "Enter Git email:"
-  read GIT_EMAIL
-  git config --global user.email "$GIT_EMAIL"
-  echo "Success."
-fi
 
 #
 # Restart shell (optional, skippable for SSH safety)

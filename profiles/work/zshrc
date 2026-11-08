@@ -1,0 +1,5 @@
+# Work Mac interactive settings. Sourced by ~/.zshrc.
+
+# Claude Code runs on the company's Foundry endpoint. The base URL and API key
+# are local secrets; see secrets.example.
+export CLAUDE_CODE_USE_FOUNDRY=1

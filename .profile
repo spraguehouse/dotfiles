@@ -30,4 +30,6 @@ fi
 # if [ -e "${HOME}/.iterm2_shell_integration.bash" ]; then
 #   source "${HOME}/.iterm2_shell_integration.bash"
 # fi
-. "$HOME/.cargo/env"
+if [ -f "$HOME/.cargo/env" ]; then
+  . "$HOME/.cargo/env"
+fi

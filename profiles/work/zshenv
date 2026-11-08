@@ -1,0 +1,6 @@
+# Work Mac environment. Sourced by ~/.zshenv in every zsh.
+
+# .NET SDKs install per user in ~/.dotnet. The x64 SDK in /usr/local/share/dotnet
+# needs Rosetta, so ours goes first.
+export DOTNET_ROOT="$HOME/.dotnet"
+path=("$DOTNET_ROOT" $path)

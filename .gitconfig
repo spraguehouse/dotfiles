@@ -57,15 +57,11 @@
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
-[user]
-	name = Joshua Sprague
-	email = joshua.spragu3@gmail.com
 [safe]
-	directory = /Users/josh/source/personal/*
-	directory = /Users/josh/source/tac/*
-	directory = /Users/josh/source/dcienterprise/*
-	directory = /Users/josh/source/infiniteloopstudio/*
-	directory = /Users/josh/source/gitlab.dcim.com/*
-	directory = /Users/josh/source/spraguehouse/*
+	directory = ~/source/*
 [url "git@github.com:"]
 	insteadOf = https://github.com/
+
+# Identity and machine-specific git settings come from the machine's profile.
+[include]
+	path = ~/.config/dotfiles/profile/gitconfig

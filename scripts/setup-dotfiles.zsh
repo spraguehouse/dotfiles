@@ -1,4 +1,6 @@
 #!/bin/zsh
+# Usage: source setup-dotfiles.zsh [profile]
+# The profile is home or work. Without one, the linked profile is kept or you are asked.
 
 # Make sure Homebrew is installed.
 if ! [ -x "$(command -v brew)" ]; then
@@ -66,25 +68,11 @@ cd ~
 #symlink .kubecompletion.bash # todo: need a zsh completion
 
 #
-# Set or update Git username/email
+# Link this machine's profile (home or work). It carries git identity and
+# machine-specific settings.
 #
 
-GIT_FULLNAME=$(git config --global --get user.name 2>/dev/null)
-GIT_EMAIL=$(git config --global --get user.email 2>/dev/null)
-
-if [ -z "$GIT_FULLNAME" ]; then
-  echo "Enter Git fullname:"
-  read GIT_FULLNAME
-  git config --global user.name "$GIT_FULLNAME"
-  echo "Success."
-fi
-
-if [ -z "$GIT_EMAIL" ]; then
-  echo "Enter Git email:"
-  read GIT_EMAIL
-  git config --global user.email "$GIT_EMAIL"
-  echo "Success."
-fi
+bash ~/dotfiles/scripts/link-profile.sh "${1:-}"
 
 #
 # Point agent harnesses at ~/.ion when it is installed
@@ -116,7 +104,7 @@ echo ""
 echo "Setup complete:"
 echo "  - Packages installed via Brewfile"
 echo "  - Dotfiles symlinked"
-echo "  - Git config verified"
+echo "  - Profile linked"
 echo "  - macOS defaults applied"
 echo "  - AC power settings applied"
 echo ""

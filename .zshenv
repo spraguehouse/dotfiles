@@ -30,6 +30,12 @@ path=(
   "$ANDROID_HOME/tools"
 )
 
+# Machine profile (home or work): its environment and PATH additions.
+export DOTFILES_PROFILE="$HOME/.config/dotfiles/profile"
+if [[ -r "$DOTFILES_PROFILE/zshenv" ]]; then
+  source "$DOTFILES_PROFILE/zshenv"
+fi
+
 # zoxide replaces cd in every shell, so agents get it too. Falls back to the
 # builtin when zoxide is not installed.
 if command -v zoxide >/dev/null 2>&1; then

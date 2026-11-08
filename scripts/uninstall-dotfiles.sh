@@ -47,6 +47,8 @@ DOTFILES=(
     ".gitignore"
     ".gitcompletion.bash"
     ".kubecompletion.bash"
+    ".config/starship.toml"
+    ".config/dotfiles/profile"
 )
 
 #

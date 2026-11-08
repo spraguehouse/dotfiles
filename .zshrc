@@ -31,6 +31,11 @@ fi
 
 [ -s "$BUN_INSTALL/_bun" ] && source "$BUN_INSTALL/_bun"
 
+# Machine profile (home or work): its interactive settings.
+if [ -r "$DOTFILES_PROFILE/zshrc" ]; then
+  source "$DOTFILES_PROFILE/zshrc"
+fi
+
 if command -v starship >/dev/null 2>&1; then
   eval "$(starship init zsh)"
 fi
