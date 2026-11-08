@@ -1,7 +1,7 @@
 # dotfiles
 
 Shell, git, and macOS setup for every machine. This repository is public:
-secrets, internal hostnames, and company endpoints never land here. They go in
+secrets and company endpoints never land here. They go in
 `~/.config/shell/secrets.env`, and a profile's `secrets.example` lists the key
 names.
 

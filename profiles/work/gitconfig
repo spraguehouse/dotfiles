@@ -1,3 +1,5 @@
 [user]
 	name = Joshua Sprague
 	email = jsprague@dciartform.com
+[url "git@gitlab.dcim.com:"]
+	insteadOf = https://gitlab.dcim.com/

@@ -3,3 +3,8 @@
 # Claude Code runs on the company's Foundry endpoint. The base URL and API key
 # are local secrets; see secrets.example.
 export CLAUDE_CODE_USE_FOUNDRY=1
+
+# Claude ecosystem setup on this Mac: worktree helpers and agent API keys.
+if [ -f ~/.claude/init.sh ]; then
+  source ~/.claude/init.sh
+fi
